@@ -31,7 +31,7 @@ body{
 .num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
 .wrap{max-width:1180px;margin:0 auto;padding:0 var(--gutter) 80px}
 header{padding:52px 0 26px;border-bottom:2px solid var(--ink);text-align:center}
-.eyebrow{font-size:11px;letter-spacing:.22em;color:var(--ink-2);text-transform:uppercase;margin:0 0 14px}
+.eyebrow{font-size:14px;letter-spacing:.22em;color:var(--ink-2);text-transform:uppercase;margin:0 0 14px}
 h1{font-family:"A2G",serif;font-weight:600;font-size:clamp(30px,5.4vw,50px);
    line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
 .sub{margin:0 auto;color:var(--ink-2);max-width:58ch;font-size:19px}
@@ -88,7 +88,7 @@ h1{font-family:"A2G",serif;font-weight:600;font-size:clamp(30px,5.4vw,50px);
 .bar-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
 .bar-name{font-size:18px;font-weight:600;letter-spacing:.02em}
 .bar-name span{font-weight:400;color:var(--ink-2);font-size:15px;margin-left:7px;letter-spacing:.06em}
-.bar-val{font-size:15px;font-weight:600}
+.bar-val{font-size:15px;font-weight:600;font-family:"Pretendard",sans-serif !important}
 .track{position:relative;height:9px;background:#DDE7EC;margin-top:9px}
 .fill{position:absolute;inset:0 auto 0 0;background:var(--ok);transition:width .5s cubic-bezier(.2,.8,.3,1)}
 .fill.warn{background:var(--seal)}
@@ -130,7 +130,7 @@ h1{font-family:"A2G",serif;font-weight:600;font-size:clamp(30px,5.4vw,50px);
   border-bottom:1px solid var(--rule);font-size:17px;font-weight:600}
 .stat b{font-family:"Pretendard",sans-serif;font-weight:400;font-size:15px}
 .stat .up{color:var(--seal)}
-footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);font-size:12px;color:var(--ink-2)}
+footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);font-size:14px;color:var(--ink-2)}
 footer p{margin:0 0 9px;max-width:none;text-align:justify}
 footer strong{color:var(--ink)}
 
@@ -138,7 +138,7 @@ footer strong{color:var(--ink)}
 .modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;
   padding:20px;background:rgba(20,22,19,.55)}
 .modal.on{display:flex}
-.modal-box{background:#E8E6E1;border:1px solid var(--ink);width:min(880px,100%);
+.modal-box{background:#EAF3F7;border:1px solid var(--ink);width:min(880px,100%);
   max-height:92vh;overflow:auto;position:relative;box-shadow:0 18px 50px rgba(0,0,0,.3)}
 .modal-hd{padding:22px 26px 16px;border-bottom:2px solid var(--ink)}
 .modal-hd .who{font-size:11px;letter-spacing:.1em;color:var(--ink-2);margin:0 0 5px}
@@ -236,7 +236,7 @@ footer strong{color:var(--ink)}
 <footer>
   <p><strong>이 지표는 무엇인가.</strong> 감독당국이 조합을 평가할 때 쓰는 CAMEL 다섯 부문 가운데 계량 산출이 가능한 네 부문(자본·자산건전성·수익성·유동성)을 공시 자료로 재구성한 것입니다.<br>경영관리(M)는 비계량 평가 항목이라 산출할 수 없어, 대신 공시된 제재 기록을 함께 표시합니다.</p>
   <p><strong>감독당국의 경영실태평가 등급이 아닙니다.</strong> 등급 산정에 쓰이는 계량지표 등급구분기준은 상호금융업감독업무시행세칙 제12조의4제7항에 따라 감독원장이 별도로 정하며, 공표되지 않습니다.<br>같은 위임 구조인 새마을금고는 감독기준 별표3·별표4로 이를 공개하고 있습니다.</p>
-  <p><strong>순자본비율은 근사 산출값입니다.</strong> 감독규정 별표5 산식을 공시 항목으로 재현한 값으로, 농협에서는 공시값과 소수점 둘째자리까지 일치를 확인했습니다. 신협은 후순위차입금이 공개 통계에 없어 실제보다 낮게 산출될 수 있습니다.</p>
+  <p><strong>순자본비율은 근사 산출값입니다.</strong> 감독규정 별표5 산식을 공시 항목으로 재현한 값으로, 농협에서는 공시값과 소수점 둘째자리까지 일치를 확인했습니다.<br>신협은 후순위차입금이 공개 통계에 없어 실제보다 낮게 산출될 수 있습니다.</p>
   <p>자료 · 금융감독원 금융통계정보시스템(FISIS). 제재 기록은 각 조합 정기공시 「기관제재 및 임원문책 사항」 항목.</p>
 </footer>
 </div>
@@ -492,7 +492,7 @@ map.style.cssText = 'position:relative;max-width:none;width:100%;';
     ulLabel.setAttribute('text-anchor', 'middle');
     ulLabel.setAttribute('font-size', '13.5');
     ulLabel.setAttribute('font-weight', '700');
-    ulLabel.setAttribute('fill', 'var(--ink-2)');
+    ulLabel.setAttribute('fill', 'var(--ink)');
     ulLabel.setAttribute('paint-order', 'stroke');
     ulLabel.setAttribute('stroke', 'rgba(255,255,255,.92)');
     ulLabel.setAttribute('stroke-width', '3');
