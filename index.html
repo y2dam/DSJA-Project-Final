@@ -352,7 +352,7 @@ const GEO_NAME_TO_KEY = {
 const sev = v => v<32?'#F3F4EE': v<42?'#E3D9D0': v<50?'#D7B9AD': v<58?'#C08476':'#A8322A';
 const map = document.getElementById('map');
 map.classList.remove('grid17');
-map.style.cssText = 'position:relative;max-width:640px;width:100%;';
+map.style.cssText = 'position:relative;max-width:none;width:100%;';
 
 (function renderKoreaMap(){
   const W = 460, H = 520;
@@ -405,7 +405,7 @@ map.style.cssText = 'position:relative;max-width:640px;width:100%;';
   // 상자(배경) 없이, 글자 테두리에만 얇은 흰색 외곽선(halo)을 둘러서
   // 그 아래 색이 무엇이든(밝든 어둡든) 글자 자체는 항상 또렷이 보이게 한다.
   // 인접한 소형 지역끼리 라벨이 겹치는 경우를 위한 수동 보정(픽셀 단위)
-  const LABEL_NUDGE = { "인천":[-20,8], "서울":[26,-18], "경기":[6,20] };
+  const LABEL_NUDGE = { "인천":[-20,8], "서울":[-4,-6], "경기":[30,32] };
 
   KOREA_GEOJSON.features.forEach(f => {
     const key = GEO_NAME_TO_KEY[f.properties.name];
