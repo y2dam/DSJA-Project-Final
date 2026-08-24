@@ -352,10 +352,10 @@ const GEO_NAME_TO_KEY = {
 const sev = v => v<32?'#F3F4EE': v<42?'#E3D9D0': v<50?'#D7B9AD': v<58?'#C08476':'#A8322A';
 const map = document.getElementById('map');
 map.classList.remove('grid17');
-map.style.cssText = 'position:relative;max-width:330px;';
+map.style.cssText = 'position:relative;max-width:480px;width:100%;';
 
 (function renderKoreaMap(){
-  const W = 300, H = 340;
+  const W = 460, H = 520;
   const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.style.cssText = 'display:block;width:100%;height:auto;';
@@ -378,7 +378,7 @@ map.style.cssText = 'position:relative;max-width:330px;';
     p.setAttribute('d', path(f));
     p.setAttribute('fill', v ? sev(v[3]) : 'var(--rule)');
     p.setAttribute('stroke', 'var(--card)');
-    p.setAttribute('stroke-width', '1.1');
+    p.setAttribute('stroke-width', '1.6');
     g.appendChild(p);
 
     if (v) {
@@ -387,11 +387,11 @@ map.style.cssText = 'position:relative;max-width:330px;';
       label.setAttribute('x', c[0]);
       label.setAttribute('y', c[1]);
       label.setAttribute('text-anchor', 'middle');
-      label.setAttribute('font-size', '8.5');
+      label.setAttribute('font-size', '13');
       label.setAttribute('font-weight', '600');
       label.setAttribute('paint-order', 'stroke');
       label.setAttribute('stroke', 'rgba(255,255,255,.7)');
-      label.setAttribute('stroke-width', '2.5');
+      label.setAttribute('stroke-width', '3.5');
       label.setAttribute('fill', v[3] >= 50 ? '#fff' : 'var(--ink)');
       label.style.pointerEvents = 'none';
       label.textContent = `${key} ${v[3]}%`;
@@ -408,13 +408,13 @@ map.style.cssText = 'position:relative;max-width:330px;';
     const g = e.target.closest('.rg');
     if(!g || !g.dataset.sido) return;
     const s = g.dataset.sido;
-    svg.querySelectorAll('.rg path').forEach(x=>{ x.setAttribute('stroke','var(--card)'); x.setAttribute('stroke-width','1.1'); });
+    svg.querySelectorAll('.rg path').forEach(x=>{ x.setAttribute('stroke','var(--card)'); x.setAttribute('stroke-width','1.6'); });
     if(filterSido===s){
       filterSido=null;
     } else {
       filterSido=s;
       g.querySelector('path').setAttribute('stroke','var(--mint)');
-      g.querySelector('path').setAttribute('stroke-width','2.5');
+      g.querySelector('path').setAttribute('stroke-width','3.5');
     }
     q.value=''; q.placeholder = filterSido
       ? `${filterSido} 조합 ${pool().length}곳 — 이름을 입력하세요`
