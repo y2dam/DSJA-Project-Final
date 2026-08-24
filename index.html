@@ -212,12 +212,13 @@ footer strong{color:var(--ink)}
   <aside>
     <div class="mapbox">
       <h3>시도별 부실 확산</h3>
-      <p class="cap">떼일 위험이 큰 대출이 5%를 넘는 조합의 비중. 칸을 누르면 그 지역 조합만 검색됩니다. 울릉도는 실제보다 가깝게 옮겨 표시했습니다.</p>
+      <p class="cap">떼일 위험이 큰 대출이 5%를 넘는 조합의 비중. 칸을 누르면 그 지역 조합만 검색됩니다.</p>
       <div class="grid17" id="map" role="group" aria-label="시도 선택"></div>
       <div class="legend"><span>낮음</span>
         <i style="background:#F3F4EE"></i><i style="background:#E3D9D0"></i>
         <i style="background:#D7B9AD"></i><i style="background:#C08476"></i>
         <i style="background:#A8322A"></i><span>높음</span></div>
+      <p style="margin:8px 0 0;font-size:11px;color:var(--ink-2)">* 울릉도는 실제보다 가깝게 옮겨 표시했습니다.</p>
     </div>
     <div class="side">
       <h3>전국 요약</h3>
@@ -451,7 +452,19 @@ map.style.cssText = 'position:relative;max-width:none;width:100%;';
     const jeju = KOREA_GEOJSON.features.find(f => f.properties.name === '제주특별자치도');
     const jc = path.centroid(jeju);
     const boxW = 30, boxH = 30;
+    const pad = 6;
     const insetCx = jc[0] + 56, insetCy = jc[1] - 6;
+
+    // 인셋 지도라는 걸 눈에 띄게 표시하는 테두리 상자
+    const frame = document.createElementNS(NS,'rect');
+    frame.setAttribute('x', insetCx - boxW/2 - pad);
+    frame.setAttribute('y', insetCy - boxH/2 - pad);
+    frame.setAttribute('width', boxW + pad*2);
+    frame.setAttribute('height', boxH + pad*2);
+    frame.setAttribute('fill', 'none');
+    frame.setAttribute('stroke', 'var(--ink)');
+    frame.setAttribute('stroke-width', '1');
+    fillsLayer.appendChild(frame);
 
     const uProj = d3.geoMercator().fitSize([boxW-4, boxH-4], ULLEUNGDO_FEATURE);
     const ut = uProj.translate(); uProj.translate([ut[0]+2, ut[1]+2]);
@@ -475,7 +488,7 @@ map.style.cssText = 'position:relative;max-width:none;width:100%;';
 
     const ulLabel = document.createElementNS(NS,'text');
     ulLabel.setAttribute('x', insetCx);
-    ulLabel.setAttribute('y', insetCy + boxH/2 + 11);
+    ulLabel.setAttribute('y', insetCy + boxH/2 + pad + 12);
     ulLabel.setAttribute('text-anchor', 'middle');
     ulLabel.setAttribute('font-size', '9.5');
     ulLabel.setAttribute('font-weight', '700');
@@ -484,7 +497,7 @@ map.style.cssText = 'position:relative;max-width:none;width:100%;';
     ulLabel.setAttribute('stroke', 'rgba(255,255,255,.92)');
     ulLabel.setAttribute('stroke-width', '3');
     ulLabel.style.pointerEvents = 'none';
-    ulLabel.textContent = '울릉도';
+    ulLabel.textContent = '울릉도*';
     labelsLayer.appendChild(ulLabel);
   }
 
