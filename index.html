@@ -168,7 +168,7 @@ footer strong{color:var(--ink)}
 <header>
   <p class="eyebrow">상호금융 재무건전성 데이터베이스</p>
   <h1>전국 재정건전성 돌아보기</h1>
-  <p class="sub">내가 거래하는 조합은 지금 어떤 상태인가.<br>농협·신협·수협·산림조합의 공시 지표를 2016년부터 반기 단위로 모았습니다.</p>
+  <p class="sub">내가 거래하는 조합은 지금 어떤 상태인가. 농협·신협·수협·산림조합의 공시 지표를 2016년부터 반기 단위로 모았습니다.</p>
   <div class="meta">
     <span>조합 <b id="mCnt">0</b>곳</span>
     <span>기준 <b id="mLast"></b></span>
@@ -212,7 +212,7 @@ footer strong{color:var(--ink)}
   <aside>
     <div class="mapbox">
       <h3>시도별 부실 확산</h3>
-      <p class="cap">떼일 위험이 큰 대출이 5%를 넘는 조합의 비중.<br>칸을 누르면 그 지역 조합만 검색됩니다.</p>
+      <p class="cap">떼일 위험이 큰 대출이 5%를 넘는 조합의 비중. 칸을 누르면 그 지역 조합만 검색됩니다. 울릉도는 실제보다 가깝게 옮겨 표시했습니다.</p>
       <div class="grid17" id="map" role="group" aria-label="시도 선택"></div>
       <div class="legend"><span>낮음</span>
         <i style="background:#F3F4EE"></i><i style="background:#E3D9D0"></i>
@@ -350,6 +350,14 @@ const GEO_NAME_TO_KEY = {
   "전라북도":"전북","전라남도":"전남","경상북도":"경북","경상남도":"경남","제주특별자치도":"제주"
 };
 const sev = v => v<32?'#F3F4EE': v<42?'#E3D9D0': v<50?'#D7B9AD': v<58?'#C08476':'#A8322A';
+
+/* 울릉도(경북 부속 도서)를 본토 지도에서 분리해 따로 배치한다.
+   실제 위치대로 두면 지도가 동쪽으로 크게 늘어나 본토 부분이 작아지기 때문. */
+const GB_FEATURE = KOREA_GEOJSON.features.find(f => f.properties.name === '경상북도');
+const ULLEUNGDO_COORDS = GB_FEATURE.geometry.coordinates[1];
+GB_FEATURE.geometry.coordinates = [GB_FEATURE.geometry.coordinates[0]];
+const ULLEUNGDO_FEATURE = { type:'Feature', geometry:{ type:'Polygon', coordinates: ULLEUNGDO_COORDS }, properties:{ name:'울릉도' } };
+
 const map = document.getElementById('map');
 map.classList.remove('grid17');
 map.style.cssText = 'position:relative;max-width:none;width:100%;';
@@ -372,6 +380,22 @@ map.style.cssText = 'position:relative;max-width:none;width:100%;';
   svg.appendChild(fillsLayer);
   svg.appendChild(labelsLayer);
 
+  // 지역 하나(path)에 툴팁·호버 효과를 붙이는 공통 함수
+  function stylePath(p, key, v){
+    if(!v) return;
+    const title = document.createElementNS(NS,'title');
+    title.textContent = `${key} · 부실 대출 비율 ${v[3]}%`;
+    p.appendChild(title);
+    p.addEventListener('mouseenter', ()=>{
+      p.style.filter = 'brightness(1.12)';
+      if(p.getAttribute('stroke')!=='var(--mint)') p.setAttribute('stroke-width','2.6');
+    });
+    p.addEventListener('mouseleave', ()=>{
+      p.style.filter = '';
+      if(p.getAttribute('stroke')!=='var(--mint)') p.setAttribute('stroke-width','1.6');
+    });
+  }
+
   // 1단계: 모든 지역의 채우기(fill)를 먼저 그린다
   KOREA_GEOJSON.features.forEach(f => {
     const key = GEO_NAME_TO_KEY[f.properties.name];
@@ -385,19 +409,7 @@ map.style.cssText = 'position:relative;max-width:none;width:100%;';
     p.setAttribute('stroke-width', '1.6');
     p.style.cursor = v ? 'pointer' : 'default';
     p.style.transition = 'filter .12s, stroke-width .12s';
-    if(v){
-      const title = document.createElementNS(NS,'title');
-      title.textContent = `${key} · 부실 대출 비율 ${v[3]}%`;
-      p.appendChild(title);
-      p.addEventListener('mouseenter', ()=>{
-        p.style.filter = 'brightness(1.12)';
-        if(p.getAttribute('stroke')!=='var(--mint)') p.setAttribute('stroke-width','2.6');
-      });
-      p.addEventListener('mouseleave', ()=>{
-        p.style.filter = '';
-        if(p.getAttribute('stroke')!=='var(--mint)') p.setAttribute('stroke-width','1.6');
-      });
-    }
+    stylePath(p, key, v);
     fillsLayer.appendChild(p);
   });
 
@@ -432,6 +444,49 @@ map.style.cssText = 'position:relative;max-width:none;width:100%;';
     label.textContent = text;
     labelsLayer.appendChild(label);
   });
+
+  // 울릉도(경북 부속) 인셋: 실제 위치는 본토에서 멀리 떨어져 있어
+  // 그대로 두면 지도가 동쪽으로 크게 늘어난다. 제주 옆으로 옮겨 축소 배치한다.
+  {
+    const jeju = KOREA_GEOJSON.features.find(f => f.properties.name === '제주특별자치도');
+    const jc = path.centroid(jeju);
+    const boxW = 30, boxH = 30;
+    const insetCx = jc[0] + 56, insetCy = jc[1] - 6;
+
+    const uProj = d3.geoMercator().fitSize([boxW-4, boxH-4], ULLEUNGDO_FEATURE);
+    const ut = uProj.translate(); uProj.translate([ut[0]+2, ut[1]+2]);
+    const uPath = d3.geoPath().projection(uProj);
+
+    const key = '경북', v = D.sido[key];
+    const g = document.createElementNS(NS,'g');
+    g.setAttribute('transform', `translate(${insetCx-boxW/2},${insetCy-boxH/2})`);
+    const p = document.createElementNS(NS,'path');
+    p.setAttribute('class','rg-path');
+    p.dataset.sido = key;
+    p.setAttribute('d', uPath(ULLEUNGDO_FEATURE));
+    p.setAttribute('fill', v ? sev(v[3]) : 'var(--rule)');
+    p.setAttribute('stroke', 'var(--card)');
+    p.setAttribute('stroke-width', '1.2');
+    p.style.cursor = v ? 'pointer' : 'default';
+    p.style.transition = 'filter .12s, stroke-width .12s';
+    stylePath(p, key, v);
+    g.appendChild(p);
+    fillsLayer.appendChild(g);
+
+    const ulLabel = document.createElementNS(NS,'text');
+    ulLabel.setAttribute('x', insetCx);
+    ulLabel.setAttribute('y', insetCy + boxH/2 + 11);
+    ulLabel.setAttribute('text-anchor', 'middle');
+    ulLabel.setAttribute('font-size', '9.5');
+    ulLabel.setAttribute('font-weight', '700');
+    ulLabel.setAttribute('fill', 'var(--ink-2)');
+    ulLabel.setAttribute('paint-order', 'stroke');
+    ulLabel.setAttribute('stroke', 'rgba(255,255,255,.92)');
+    ulLabel.setAttribute('stroke-width', '3');
+    ulLabel.style.pointerEvents = 'none';
+    ulLabel.textContent = '울릉도';
+    labelsLayer.appendChild(ulLabel);
+  }
 
   svg.addEventListener('click', e=>{
     const p = e.target.closest('.rg-path');
