@@ -47,7 +47,7 @@ h1{font-family:"A2G",serif;font-weight:600;font-size:clamp(30px,5.4vw,50px);
 }
 .searchbox input::placeholder{color:var(--ink-2)}
 .searchbox .cnt{padding:13px 14px;font-size:15px;color:var(--ink-2);white-space:nowrap;
-  font-family:"IBM Plex Mono",monospace;border-left:1px solid var(--rule)}
+  font-family:"Pretendard",system-ui,sans-serif;border-left:1px solid var(--rule)}
 .results{
   position:absolute;top:calc(100% - 1px);left:0;right:0;z-index:20;
   background:var(--card);border:1.5px solid var(--ink);border-top:0;
@@ -131,7 +131,7 @@ h1{font-family:"A2G",serif;font-weight:600;font-size:clamp(30px,5.4vw,50px);
 .stat b{font-family:"Pretendard",sans-serif;font-weight:600;font-size:15px}
 .stat .up{color:var(--seal)}
 footer{margin-top:54px;padding-top:22px;border-top:2px solid var(--ink);font-size:12px;color:var(--ink-2)}
-footer p{margin:0 0 9px;max-width:74ch}
+footer p{margin:0 0 9px;max-width:none;text-align:justify}
 footer strong{color:var(--ink)}
 
 /* 추이 모달 */
@@ -168,7 +168,7 @@ footer strong{color:var(--ink)}
 <header>
   <p class="eyebrow">상호금융 재무건전성 데이터베이스</p>
   <h1>전국 재정건전성 돌아보기</h1>
-  <p class="sub">내가 거래하는 조합은 지금 어떤 상태인가.<br>농협·신협·수협·산림조합의 공시 지표를 2016년부터 반기 단위로 모았습니다.</p>
+  <p class="sub">내가 거래하는 조합은 지금 어떤 상태인가. 농협·신협·수협·산림조합의 공시 지표를 2016년부터 반기 단위로 모았습니다.</p>
   <div class="meta">
     <span>조합 <b id="mCnt">0</b>곳</span>
     <span>기준 <b id="mLast"></b></span>
@@ -212,7 +212,7 @@ footer strong{color:var(--ink)}
   <aside>
     <div class="mapbox">
       <h3>시도별 부실 확산</h3>
-      <p class="cap">떼일 위험이 큰 대출이 5%를 넘는 조합의 비중.<br>칸을 누르면 그 지역 조합만 검색됩니다.</p>
+      <p class="cap">떼일 위험이 큰 대출이 5%를 넘는 조합의 비중. 칸을 누르면 그 지역 조합만 검색됩니다.</p>
       <div class="grid17" id="map" role="group" aria-label="시도 선택"></div>
       <div class="legend"><span>낮음</span>
         <i style="background:#F3F4EE"></i><i style="background:#E3D9D0"></i>
