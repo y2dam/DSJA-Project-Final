@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.css">
+<style>
+@font-face{font-family:"A2G";src:url("fonts/A2G-Medium.ttf") format("truetype");font-weight:500;font-display:swap}
+@font-face{font-family:"A2G";src:url("fonts/A2G-SemiBold.ttf") format("truetype");font-weight:600;font-display:swap}
+body{margin:0}
+::selection{background:#6B4A3233}
+@keyframes shatterFall2{0%{transform:translate(0,0) rotate(0deg) scale(1);opacity:1;}55%{opacity:1;}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--dr)) scale(var(--sc));opacity:0;}}
+@keyframes instantHide{0%{opacity:1;}100%{opacity:0;}}
+@keyframes splitLeft{0%{transform:translateX(0) rotate(0);}100%{transform:translateX(-60px) rotate(-1.4deg);}}
+@keyframes splitRight{0%{transform:translateX(0) rotate(0);}100%{transform:translateX(60px) rotate(1.4deg);}}
+@keyframes crackDraw{0%{stroke-dashoffset:100;opacity:0;}15%{opacity:.4;}70%{stroke-dashoffset:0;opacity:.4;}100%{stroke-dashoffset:0;opacity:.4;}}
+@keyframes crackGapOpen{0%{clip-path:polygon(0% 0%,100% 0%,100% 100%,0% 100%,0% 0%,50% 0%,46% 7%,54% 13%,44% 19%,55% 26%,45% 33%,56% 41%,45% 48%,56% 55%,45% 62%,55% 70%,44% 78%,54% 86%,46% 93%,50% 100%,50% 100%,46% 93%,54% 86%,44% 78%,55% 70%,45% 62%,56% 55%,45% 48%,56% 41%,45% 33%,55% 26%,44% 19%,54% 13%,46% 7%,50% 0%,0% 0%);}100%{clip-path:polygon(0% 0%,100% 0%,100% 100%,0% 100%,0% 0%,47.5% 0%,43.5% 7%,51.5% 13%,41.5% 19%,52.5% 26%,42.5% 33%,53.5% 41%,42.5% 48%,53.5% 55%,42.5% 62%,52.5% 70%,41.5% 78%,51.5% 86%,43.5% 93%,47.5% 100%,52.5% 100%,48.5% 93%,56.5% 86%,46.5% 78%,57.5% 70%,47.5% 62%,58.5% 55%,47.5% 48%,58.5% 41%,47.5% 33%,57.5% 26%,46.5% 19%,56.5% 13%,48.5% 7%,52.5% 0%,0% 0%);}}
+@keyframes crackFade{0%{opacity:1;}100%{opacity:0;}}
+@keyframes introFadeUpCenter{0%{opacity:0;transform:translateY(calc(-50% + 34px));}100%{opacity:1;transform:translateY(-50%);}}
+@keyframes baseSink{0%{transform:translateY(0) scaleX(1);}100%{transform:translateY(8px) scaleX(1.06);}}
+@keyframes debrisFall{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(150px) rotate(220deg);opacity:0;}}
+@keyframes introFadeUp{0%{opacity:0;transform:translateY(34px);}100%{opacity:1;transform:translateY(0);}}
+@keyframes arrowBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+@keyframes docFadeIn{0%{opacity:0;transform:translateY(18px);}100%{opacity:1;transform:translateY(0);}}
+@keyframes cardFadeOut{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-14px);}}
+@keyframes rowIn{0%{opacity:0;transform:translateY(8px);}100%{opacity:1;transform:translateY(0);}}
+@keyframes stampIn{0%{opacity:0;transform:rotate(-13deg) scale(.4);}100%{opacity:.9;transform:rotate(-13deg) scale(1);}}
+@keyframes sweepBeam{0%{left:0%;opacity:0;}6%{opacity:1;}94%{opacity:1;}100%{left:100%;opacity:0;}}
+@keyframes cellFlicker{0%{opacity:1;}6%{opacity:.22;}14%{opacity:1;}100%{opacity:1;}}
+.pt-panel-b{display:none}
+.pt-tab{transition:background .2s,color .2s;background:#E3ECEF;color:#8A7362}
+#pt1b:checked ~ .pt-body .pt-panel-a,#pt2b:checked ~ .pt-body .pt-panel-a,#pt3b:checked ~ .pt-body .pt-panel-a,#pt4b:checked ~ .pt-body .pt-panel-a{display:none}
+#pt1b:checked ~ .pt-body .pt-panel-b,#pt2b:checked ~ .pt-body .pt-panel-b,#pt3b:checked ~ .pt-body .pt-panel-b,#pt4b:checked ~ .pt-body .pt-panel-b{display:block}
+#pt1b:checked ~ .pt-body .pt-tab-a,#pt2b:checked ~ .pt-body .pt-tab-a,#pt3b:checked ~ .pt-body .pt-tab-a,#pt4b:checked ~ .pt-body .pt-tab-a{background:#E3ECEF;color:#8A7362}
+#pt1b:checked ~ .pt-body .pt-tab-b,#pt2b:checked ~ .pt-body .pt-tab-b,#pt3b:checked ~ .pt-body .pt-tab-b,#pt4b:checked ~ .pt-body .pt-tab-b{background:#6B4A32;color:#fff}
+#pt1a:checked ~ .pt-body .pt-tab-a,#pt2a:checked ~ .pt-body .pt-tab-a,#pt3a:checked ~ .pt-body .pt-tab-a,#pt4a:checked ~ .pt-body .pt-tab-a{background:#6B4A32;color:#fff}
+.drm-tab-normal{background:#6B4A32;color:#fff}
+.drm-tab-locked{background:#E3ECEF;color:#8A7362}
+#drmlocked:checked ~ .drm-tabs .drm-tab-normal{background:#E3ECEF;color:#8A7362}
+#drmlocked:checked ~ .drm-tabs .drm-tab-locked{background:#B25444;color:#fff}
+.drm-panel-locked{display:none}
+#drmlocked:checked ~ .drm-panel-normal{display:none}
+#drmlocked:checked ~ .drm-panel-locked{display:flex}
+.toc-side{display:flex}
+@media (max-width:860px){.toc-side{display:none}}
+</style>
+</helmet>
+
+<nav class="toc-side" aria-label="목차" style="position:fixed;top:50%;right:26px;transform:translateY(-50%);z-index:30;flex-direction:column;align-items:flex-end;gap:13px;">
+  <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+    <a href="{{ item.href }}" onClick="{{ item.onClick }}" style="display:flex;align-items:center;text-decoration:none;">
+      <span style="font-size:15px;font-family:'Pretendard',sans-serif;font-weight:{{ item.weight }};color:{{ item.color }};white-space:nowrap;transition:all .2s;">{{ item.label }}</span>
+    </a>
+  </sc-for>
+</nav>
+
+<div style="position:relative;background:radial-gradient(ellipse 70vw 60vh at 82% 8%,#5B9BD9 0%,#8CBBE6 24%,transparent 58%),radial-gradient(ellipse 55vw 46vh at 30% 55%,#E8DAC0 0%,transparent 58%),radial-gradient(ellipse 60vw 60vh at 10% 92%,#9DC3E8 0%,transparent 56%),repeating-linear-gradient(to bottom,transparent 0 31px,#00000005 31px 32px),repeating-linear-gradient(to right,transparent 0 39px,#00000004 39px 40px),#DAEDF6;background-attachment:fixed,fixed,fixed,scroll,scroll,scroll;min-height:100vh;color:#4A3A2E;font-family:'Pretendard',system-ui,sans-serif;overflow:hidden;">
+
+
+
+<section style="position:relative;z-index:1;min-height:100vh;padding:24px 0;overflow:hidden;">
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;animation:docFadeIn .7s ease-out .15s forwards, cardFadeOut .8s ease-in 5s forwards;">
+  <div style="position:relative;width:min(440px,88vw);">
+    <div style="position:relative;background:#EEF5F8;border:1px solid #D9D9D9;border-radius:4px;padding:36px 32px 30px;box-shadow:0 22px 50px -16px rgba(74,58,46,.28);">
+      <p style="margin:0 0 6px;font-family:'Pretendard',sans-serif;font-size:11px;letter-spacing:.16em;color:#8A7362;text-transform:uppercase;">경영공시 · 재무상태표</p>
+      <h2 style="margin:0 0 22px;font-family:'Pretendard',sans-serif;font-weight:600;font-size:22px;color:#4A3A2E;">OO농협 2024년 06월 결산</h2>
+      <div style="border-top:1px solid #4A3A2E;"></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;padding:16px 0;border-bottom:1px solid #D9D9D9;opacity:0;animation:rowIn .7s ease-out .6s forwards;">
+        <span style="font-size:15px;color:#4A3A2E;">자산총계</span>
+        <span style="width:104px;height:15px;border-radius:2px;background:repeating-linear-gradient(135deg,#6B4A32 0 5px,#8A7362 5px 10px);opacity:.55;"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;padding:16px 0;border-bottom:1px solid #D9D9D9;opacity:0;animation:rowIn .7s ease-out 1.3s forwards;">
+        <span style="font-size:15px;color:#4A3A2E;">부채총계</span>
+        <span style="width:78px;height:15px;border-radius:2px;background:repeating-linear-gradient(135deg,#6B4A32 0 5px,#8A7362 5px 10px);opacity:.55;"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;padding:16px 0;border-bottom:1px solid #D9D9D9;opacity:0;animation:rowIn .7s ease-out 2s forwards;">
+        <span style="font-size:15px;color:#4A3A2E;">순자본비율(%)</span>
+        <span style="font-family:'Pretendard',sans-serif;font-size:20px;font-weight:600;color:#6B4A32;">?</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;padding:16px 0;border-bottom:1px solid #D9D9D9;opacity:0;animation:rowIn .7s ease-out 2.7s forwards;">
+        <span style="font-size:15px;color:#4A3A2E;">고정이하여신비율(%)</span>
+        <span style="font-family:'Pretendard',sans-serif;font-size:20px;font-weight:600;color:#6B4A32;">?</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 0 0;opacity:0;animation:rowIn .7s ease-out 3.4s forwards;">
+        <span style="font-size:15px;color:#4A3A2E;">첨부파일</span>
+        <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:#8A7362;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8A7362" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 118 0v4"></path></svg>
+          열람 불가 · DRM 암호화
+        </span>
+      </div>
+      <div style="position:absolute;top:-16px;right:-16px;width:88px;height:88px;border-radius:50%;border:2px solid #6B4A32;background:#DAEDF6;display:flex;align-items:center;justify-content:center;text-align:center;color:#6B4A32;font-family:'Pretendard',sans-serif;font-size:12px;letter-spacing:.04em;line-height:1.35;transform:rotate(-13deg) scale(.4);opacity:0;animation:stampIn .5s cubic-bezier(.34,1.56,.64,1) 4.1s forwards;">공시<br>완료</div>
+    </div>
+  </div>
+  </div>
+
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;width:100%;text-align:center;padding:0 24px;">
+  <div style="opacity:0;animation:introFadeUp 2s cubic-bezier(.16,.62,.25,1) 5.5s forwards;">
+    <p style="font-size:13px;letter-spacing:.22em;color:#8A7362;text-transform:uppercase;margin:0 0 16px;font-family:'IBM Plex Mono',monospace;">상호금융 재무건전성 탐사보도</p>
+    <h1 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(32px,6vw,58px);line-height:1.3;margin:0 auto;letter-spacing:-.01em;max-width:720px;">은행은 건전하다고 하는데…<br>그 말을 확인할 방법이 없다</h1>
+  </div>
+  </div>
+
+  <div style="position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.15em;color:#8A7362;opacity:0;animation:introFadeUp .9s ease-out 6.9s forwards, arrowBounce 1.6s ease-in-out 7.5s infinite;">↓ SCROLL</div>
+</section>
+
+<div style="position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 24px 100px;">
+
+<header style="padding:50px 0 30px;border-bottom:2px solid #4A3A2E;text-align:center;">
+  <p style="margin:0 auto;color:#8A7362;max-width:52ch;font-size:18px;line-height:1.7;">농협·축협·신협·새마을금고의 재무건전성 정보를 한데 모아 분석했다.<br>금융기관마다 공시 방식과 평가 기준이 달랐고, 시민이 직접 건전성을 판단하기에는 재무제표와 금융용어가 지나치게 복잡했다.</p>
+  <div style="display:flex;justify-content:center;gap:16px;margin-top:22px;font-size:14px;color:#8A7362;">
+    <span>취재·글 · <b style="color:#4A3A2E;font-weight:600;">OOO 기자</b></span>
+    <span>2026.08.24</span>
+  </div>
+</header>
+
+<div style="margin:36px 0 8px;aspect-ratio:16/9;background:repeating-linear-gradient(135deg,#EEF5F8 0 14px,#E3ECEF 14px 28px);border:1px solid #D9D9D9;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+  <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#8A7362;">사진 삽입 — 남양주동부새마을금고 전경 (자료 제공 필요)</span>
+</div>
+<p style="margin:6px 0 0;font-size:12px;color:#8A7362;">사진 예시 캡션이 들어갈 자리입니다.</p>
+
+<section style="margin-top:44px;">
+  <p style="font-size:21px;line-height:1.85;margin:0 0 20px;">600억원 규모의 부동산 대출이 부실로 돌아왔다. 대출 과정에서 서류 조작이 이뤄졌지만 이를 제대로 확인하지 않고 대출금을 내준 정황도 드러났다. 결국 해당 대출을 감당하지 못한 남양주동부새마을금고는 지난 7월 인근 금고에 흡수합병됐다.</p>
+  <p style="font-size:19px;line-height:1.85;margin:0 0 20px;color:#4A3A2E;">합병 결정 직후에는 예·적금을 해지하려는 고객들이 몰리면서 사흘 새 100억원이 빠져나가기도 했다. 새마을금고의 부동산 대출 부실과 연체율 상승이 잇따라 드러나면서 금융기관의 건전성을 둘러싼 불안도 커졌다.</p>
+  <p style="font-family:'A2G',serif;font-weight:500;font-size:22px;line-height:1.6;margin:32px 0;padding:22px 26px;background:#EEF5F8;border-left:3px solid #6B4A32;border-radius:0 14px 14px 0;">그렇다면 평소 금융기관의 위험은 어떻게 알 수 있을까.</p>
+  <p style="font-size:19px;line-height:1.85;margin:0 0 20px;">금융기관은 재무제표와 경영공시를 통해 연체율, 순자본비율, 대손충당금 적립률 등 재무건전성 관련 정보를 공개하고 있다. 하지만 숫자가 공개돼 있다는 것만으로 금융기관의 위험을 쉽게 판단하기는 어렵다.</p>
+  <p style="font-size:19px;line-height:1.85;margin:0 0 20px;">특히 이번 사태의 진원지가 된 상호금융권은 시중은행 등 1금융권과 달리 기관별로 공시 형식과 지표가 제각각이어서 비교가 더 어렵다. 수십만 명이 이용하는 농협·신협·새마을금고 같은 제2금융권 기관들은 지역 밀착형으로 운영되지만, 정작 건전성을 가늠할 수 있는 정보는 여러 기관에 흩어져 있거나 접근 자체가 쉽지 않다.</p>
+  <p style="font-size:19px;line-height:1.85;margin:0;">본 기사는 농·축협·신협·새마을금고의 재무건전성 정보를 한데 모아 비교했다. 각 기관이 어떤 정보를 공개하고 있는지부터 실제 재무지표의 차이, 건전성을 평가하는 기준까지 데이터를 통해 살펴봤다.</p>
+</section>
+
+<section id="sec01" style="margin-top:104px;padding-top:8px;">
+  <p style="font-size:13px;letter-spacing:.1em;color:#6B4A32;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin:0 0 8px;">01</p>
+  <h2 style="font-family:'A2G',serif;font-weight:600;font-size:28px;margin:0 0 20px;line-height:1.4;">공시된 숫자만으로<br>금융기관의 위험을 제대로 알 수 있을까</h2>
+  <p style="font-size:19px;line-height:1.85;margin:0 0 20px;">데이터를 모으는 과정부터 기관별 공시 방식의 차이가 드러났다. 대부분의 상호금융기관은 홈페이지의 경영공시 메뉴에서 재무정보를 PDF로 제공하고 있었다. 산림조합은 '회원조합 경영공시', 수협은 '조합 경영공시자료' 메뉴에서 조합별 자료를 내려받을 수 있었다. 반면 새마을금고는 재무제표를 홈페이지에서 직접 조회해야 했다. 이에 본지는 새마을금고의 재무정보를 홈페이지에서 크롤링해 수집한 뒤, 기관별 재무건전성 지표를 비교했다.</p>
+  <p style="font-size:19px;line-height:1.85;margin:0 0 20px;">하지만 자료를 올려놓았다는 것과 실제로 정보를 확인할 수 있다는 것은 다른 문제였다.</p>
+  <p style="font-size:19px;line-height:1.85;margin:0 0 28px;">지역농협은 상호금융업감독규정 제9조에 따라 반기마다 재무상태표를 포함한 경영공시를 의무적으로 공개한다. 예금자가 자신이 돈을 맡긴 금융기관의 건전성을 확인할 수 있는 사실상 유일한 공개 창구다.</p>
+
+  <div style="padding:22px 24px;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 24px -12px rgba(74,58,46,.25);border-radius:14px;">
+    <input type="radio" name="drmdemo" id="drmnormal" checked style="display:none;">
+    <input type="radio" name="drmdemo" id="drmlocked" style="display:none;">
+    <p style="margin:0 0 14px;font-size:13px;color:#8A7362;">직접 눌러보세요 — 같은 이름의 '공시 파일'이지만 결과는 다릅니다.</p>
+    <div class="drm-tabs" style="display:flex;gap:6px;margin-bottom:18px;">
+      <label for="drmnormal" class="drm-tab drm-tab-normal" style="cursor:pointer;font-size:13px;padding:6px 14px;border-radius:20px;transition:background .2s,color .2s;">일반 공시 파일</label>
+      <label for="drmlocked" class="drm-tab drm-tab-locked" style="cursor:pointer;font-size:13px;padding:6px 14px;border-radius:20px;transition:background .2s,color .2s;">DRM 암호화 파일</label>
+    </div>
+    <div class="drm-panel drm-panel-normal" style="display:flex;align-items:center;gap:16px;margin-bottom:22px;">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#5B7A52" stroke-width="1.8" style="flex:none;"><path d="M6 2h9l5 5v15H6z"></path><path d="M15 2v5h5"></path><path d="M9 13l2 2 4-4"></path></svg>
+      <div><p style="margin:0;font-weight:600;font-size:15px;">재무상태표.pdf</p><p style="margin:3px 0 0;font-size:13px;color:#5B7A52;">열람 가능 — 자산·부채·순자본비율 확인 가능</p></div>
+    </div>
+    <div class="drm-panel drm-panel-locked" style="align-items:center;gap:16px;margin-top:22px;">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#B25444" stroke-width="1.8" style="flex:none;"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 118 0v4"></path></svg>
+      <div><p style="margin:0;font-weight:600;font-size:15px;">재무상태표.pdf</p><p style="margin:3px 0 0;font-size:13px;color:#B25444;">열람 불가 — FasooSecureContainer로 암호화됨</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="sec02" style="margin-top:100px;">
+  <p style="font-size:13px;letter-spacing:.1em;color:#6B4A32;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin:0 0 8px;">02</p>
+  <h2 style="font-family:'A2G',serif;font-weight:600;font-size:28px;margin:0 0 20px;">파일은 있는데, 읽을 수 없다</h2>
+  <p style="font-size:19px;line-height:1.85;margin:0 0 28px;">취재팀이 2018~2026년 전국 지역농협 경영공시 17,233건(156개 지역본부, 1,174개 지역농협)을 전수 분석한 결과, 조사 대상 공시의 42.6%에서 신용 재무상태표를 확인할 수 없었다. 파일이 없는 게 아니다. 파일은 있다. 그런데 읽을 수 없다.</p>
+
+  <div style="background:transparent;border-top:1px solid #4A3A2E22;border-bottom:1px solid #4A3A2E22;padding:24px 0;margin-bottom:14px;overflow:hidden;">
+    <p style="font-size:13px;color:#8A7362;margin:0 24px 6px;">전국 지역농협 경영공시 17,233건 중</p>
+    <p style="font-size:14px;color:#6B4A32;margin:0 24px 14px;font-family:'Pretendard',sans-serif;">겉보기엔 같은 파일, 열어보면 절반 가까이가 비어있다</p>
+    <div ref="{{ scanRef }}" style="position:relative;overflow:hidden;width:100%;">
+      <div style="display:grid;grid-template-columns:repeat(22,1fr);gap:8px;">
+        <sc-for list="{{ cells }}" as="cell" hint-placeholder-count="132">
+          <div style="aspect-ratio:1;width:100%;display:flex;align-items:center;justify-content:center;">
+            <div style="width:82%;height:82%;background:{{ cell.color }};clip-path:polygon(0 0,65% 0,100% 35%,100% 100%,0% 100%);animation:{{ cell.anim }};animation-play-state:{{ playState }};"></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="position:absolute;top:0;left:0;width:4px;height:100%;margin-left:-2px;background:linear-gradient(180deg,transparent,#F5FDFF,transparent);box-shadow:0 0 22px 6px #BEE7FFdd,0 0 8px 2px #ffffffee;animation:sweepBeam 12s linear infinite;animation-play-state:{{ playState }};"></div>
+    </div>
+    <div style="display:flex;gap:18px;margin-top:16px;flex-wrap:wrap;">
+      <span style="display:flex;align-items:center;gap:7px;font-size:13px;color:#4A3A2E;"><span style="width:11px;height:11px;border-radius:3px;background:#B25444;display:inline-block;"></span>신용 재무상태표 확인 불가 (42.6%)</span>
+      <span style="display:flex;align-items:center;gap:7px;font-size:13px;color:#8A7362;"><span style="width:11px;height:11px;border-radius:3px;background:#D8CFC5;display:inline-block;"></span>확인 가능</span>
+    </div>
+  </div>
+
+  <div ref="{{ statsRef }}" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:32px;">
+    <div style="text-align:center;padding:0 14px;display:flex;flex-direction:column;align-items:center;">
+      <div style="width:80px;height:80px;margin:0 0 16px;display:flex;align-items:center;justify-content:center;">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#C9A227" stroke-width="1.5">
+          <path d="M6 2h9l5 5v15H6z"></path>
+          <path d="M15 2v5h5"></path>
+          <path d="M8.5 10.5q1.2-1 2.4 0t2.4 0t2.4 0" stroke="#B25444" stroke-width="1.2"></path>
+          <path d="M8.5 13.5q1.2-1 2.4 0t2.4 0t2.4 0" stroke="#B25444" stroke-width="1.2"></path>
+          <path d="M8.5 16.5q1.2-1 2.4 0t2.4 0t2.4 0" stroke="#B25444" stroke-width="1.2"></path>
+        </svg>
+      </div>
+      <p style="font-family:'Pretendard',sans-serif;font-size:24px;font-weight:600;margin:0 0 6px;color:#4A3A2E;">{{ pctText }}</p>
+      <p style="font-family:'Pretendard',sans-serif;font-size:13px;color:#8A7362;margin:0;line-height:1.5;">못 읽는 공시 중<br>스캔본으로 올라온 비율</p>
+    </div>
+    <div style="text-align:center;padding:0 14px;border-left:1px solid #4A3A2E22;border-right:1px solid #4A3A2E22;display:flex;flex-direction:column;align-items:center;">
+      <div style="width:80px;height:80px;margin:0 0 16px;display:flex;align-items:center;justify-content:center;position:relative;">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#C9A227" stroke-width="1.5"><path d="M6 2h9l5 5v15H6z"></path><path d="M15 2v5h5"></path></svg>
+        <svg width="33" height="33" viewBox="0 0 24 24" fill="none" stroke="#B25444" stroke-width="1.8" style="position:absolute;bottom:13px;right:20px;"><rect x="4" y="10.5" width="16" height="11" rx="2.5" fill="#DAEDF6"></rect><path d="M7.5 10.5V7a4.5 4.5 0 019 0v3.5" fill="none"></path><circle cx="12" cy="16" r="1.4" fill="#B25444" stroke="none"></circle></svg>
+      </div>
+      <p style="font-family:'Pretendard',sans-serif;font-size:24px;font-weight:600;margin:0 0 6px;color:#4A3A2E;">{{ count1913Text }}</p>
+      <p style="font-family:'Pretendard',sans-serif;font-size:13px;color:#8A7362;margin:0;line-height:1.5;">전체 PDF 77,919개 중<br>Fasoo DRM 암호화 (2.46%)</p>
+    </div>
+    <div style="text-align:center;padding:0 14px;display:flex;flex-direction:column;align-items:center;">
+      <div style="width:80px;height:80px;margin:0 0 16px;display:flex;align-items:center;justify-content:center;">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#B25444" stroke-width="1.5"><path d="M6 2h9l5 5v15H6z"></path><path d="M15 2v5h5"></path><path d="M4.5 21.5L19.5 3.5"></path></svg>
+      </div>
+      <p style="font-family:'Pretendard',sans-serif;font-size:24px;font-weight:600;margin:0 0 6px;color:#4A3A2E;">{{ count126Text }}</p>
+      <p style="font-family:'Pretendard',sans-serif;font-size:13px;color:#8A7362;margin:0;line-height:1.5;">공시 패키지 전체가<br>0바이트로 공개</p>
+    </div>
+  </div>
+
+  <p style="font-size:19px;line-height:1.85;margin:0 0 20px;">읽을 수 없는 65.11%는 스캔본으로 올라와 있어, 컴퓨터가 읽을 수 없었다. 하지만 더 큰 문제는 따로 있다. 파일을 내려받아도 아예 열 수 없는 경우다. 전체 다운로드된 PDF 77,919개를 파일 헤더로 분석한 결과, 1,913개(2.46%)가 'FasooSecureContainer' 서명을 가진 Fasoo DRM 암호화 파일이었다. 조합원은 물론 어떤 외부인도 내용을 볼 수 없다.</p>
+
+  <p style="font-size:19px;line-height:1.6;margin:0 0 20px;padding:20px 24px;background:#E3ECEF;border-left:3px solid #6B4A32;border-radius:0 14px 14px 0;">경북 영천시지부 임고농협과 경북 상주시지부 모서농협은 공시 패키지 전체를 DRM 상태 그대로 4회 반복 게시했다. 극단적인 사례는 경남 고성군 정미농협 — 2019년 12월 결산 공시에 첨부된 11개 파일 전부가 DRM으로 잠겨, 단 한 글자도 열람할 수 없었다.</p>
+
+  <p style="font-size:19px;line-height:1.85;margin:0 0 20px;">DRM 파일을 반복적으로 게시한 조합도 37곳에 달했다. 기존의 공시 불이행은 '파일을 올리지 않은 것'이었다. 그러나 여기서 확인된 문제는 다르다. 법적 의무인 공시 파일을 올렸다는 기록은 남지만, 예금자·조합원·언론·연구자 등 외부에서는 실질적으로 접근할 수 없다. 형식적 이행과 실질적 공개 사이의 간극이다.</p>
+
+  <p style="font-size:19px;line-height:1.85;margin:0;">지역농협 경영공시 사이트 어디에도 "이 파일은 열람 불가입니다"라는 안내는 없다. 예금자가 파일을 받아서 직접 열어보기 전까지는 알 수 없다. 내려받아도 열리지 않는 재무제표가, 8년째 '공시되고 있다'.</p>
+</section>
+
+<section id="sec03" style="margin-top:100px;">
+  <p style="font-size:13px;letter-spacing:.1em;color:#6B4A32;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin:0 0 8px;">03</p>
+  <h2 style="font-family:'A2G',serif;font-weight:600;font-size:28px;margin:0 0 20px;">재무제표를 펼쳐봤더니…<br>시민이 알아야 할 숫자가 너무 많다</h2>
+  <p style="font-size:19px;line-height:1.85;margin:0 0 20px;">설령 공시 자료를 정상적으로 내려받을 수 있다고 해도 또 다른 문제가 남는다. 재무제표를 읽는 것 자체가 쉽지 않다는 점이다. 재무제표에서 '순자본비율', '고정이하여신비율', '대손충당금적립비율', '유동성비율', '총자산순이익률', '순이자마진', '자기자본비율' 등이 나오는데 일반 시민 입장에서는 숫자의 의미를 바로 이해하기 어렵다.</p>
+  <p style="font-size:19px;line-height:1.85;margin:0 0 28px;">금융감독원에서는 금융용어사전을 제공하고 있지만, 금융기관의 건전성을 확인하는 과정에서는 여전히 전문 용어를 마주해야 한다.</p>
+
+  <div style="margin:0;padding:22px;border:1px dashed #D9D9D9;border-radius:14px;text-align:center;color:#8A7362;font-size:15px;background:#F1F2EC;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+    <span style="font-family:'IBM Plex Mono',monospace;">[ 위젯 삽입 자리 ]</span>
+    <span>설문조사 결과 + 인터랙티브 용어사전</span>
+  </div>
+</section>
+
+<section id="sec04" style="margin-top:100px;">
+  <p style="font-size:13px;letter-spacing:.1em;color:#6B4A32;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin:0 0 8px;">04</p>
+  <h2 style="font-family:'A2G',serif;font-weight:600;font-size:28px;margin:0 0 20px;">그래서 전국 금융기관의<br>건전성을 직접 비교해봤다</h2>
+  <p style="font-size:19px;line-height:1.85;margin:0 0 20px;">본 기사는 전국의 농·축협, 신협, 새마을금고, 수협, 산림조합 등을 대상으로 재무건전성 관련 데이터를 모아 동일한 기준으로 정리하고 비교했다. 자료 수집에는 금융감독원의 금융통계정보시스템(FISIS)을 활용했으며, 새마을금고는 홈페이지에서 직접 조회해 크롤링을 통해 데이터를 수집했다.</p>
+  <p style="font-size:19px;line-height:1.85;margin:0 0 20px;">금융당국은 금융기관의 경영 상태를 종합적으로 살펴 1등급(우수)부터 5등급(위험)까지 평가한다. 하지만 「상호금융업감독업무시행세칙」 제12조의4⑦에 따라 이 등급의 산정 기준은 공표 대상이 아니다. 감독 기관도 다르다 — 농협·신협·수협·산림조합은 금융위원회가, 새마을금고는 행정안전부가 감독한다.</p>
+  <p style="font-size:19px;line-height:1.85;margin:0 0 28px;">이에 본 기사는 감독당국의 등급을 재현하는 대신, 공개된 지표를 있는 그대로 비교하는 방식을 택했다. 2,199개 조합의 2016~2025년 반기별 데이터를 바탕으로 아래 네 가지 지표를 산출해 같은 기준 시점 전국 조합 중 백분위로 표시했다.</p>
+
+  <details style="margin:0 0 28px;padding:16px 20px;border:1px solid #D9D9D9;border-radius:12px;color:#6B4A32;">
+    <summary style="cursor:pointer;font-size:15px;font-weight:600;">지표 산출 방법 더 읽어보기</summary>
+    <div style="margin-top:14px;font-size:15px;line-height:1.8;color:#4A3A2E;">각 지표는 금융통계정보시스템(FISIS) 및 새마을금고 홈페이지 공시 원문에서 추출한 반기별 수치를 기준으로 계산했다. 백분위는 같은 결산 시점에 공시한 전국 조합을 대상으로 산출했으며, 결산 시점마다 비교 대상 조합 수가 달라질 수 있다.</div>
+  </details>
+
+  <div style="position:relative;">
+    <div aria-hidden="true" style="position:absolute;top:-40px;left:-30px;width:260px;height:260px;border-radius:50%;background:#B25444;opacity:.2;filter:blur(60px);pointer-events:none;z-index:0;"></div>
+    <div aria-hidden="true" style="position:absolute;top:120px;right:-50px;width:280px;height:280px;border-radius:50%;background:#5B7A52;opacity:.18;filter:blur(65px);pointer-events:none;z-index:0;"></div>
+    <div aria-hidden="true" style="position:absolute;bottom:-60px;left:30%;width:300px;height:300px;border-radius:50%;background:#C9A227;opacity:.17;filter:blur(70px);pointer-events:none;z-index:0;"></div>
+    <div style="position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,1fr);gap:14px;">
+    <div class="pt-card" style="position:relative;background:rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.35);box-shadow:0 8px 24px -10px rgba(74,58,46,.15),inset 0 1px 0 rgba(255,255,255,.35);border-radius:12px;padding:20px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;" style-hover="transform:translateY(-4px);box-shadow:0 14px 28px -12px rgba(74,58,46,.3);border-color:#6B4A32;">
+      <input type="radio" name="pt1" id="pt1a" defaultChecked="{{ true }}" style="display:none;">
+      <input type="radio" name="pt1" id="pt1b" style="display:none;">
+      <div class="pt-body">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;">
+          <span style="font-weight:600;font-size:17px;">자기자본비율</span>
+          <div style="display:flex;gap:4px;flex:none;">
+            <label for="pt1a" class="pt-tab pt-tab-a" style="font-size:12px;padding:4px 10px;border-radius:20px;cursor:pointer;">2016</label>
+            <label for="pt1b" class="pt-tab pt-tab-b" style="font-size:12px;padding:4px 10px;border-radius:20px;cursor:pointer;">2025</label>
+          </div>
+        </div>
+        <p style="font-size:14px;color:#8A7362;margin:0 0 14px;">조합이 자기 돈으로 얼마나 버틸 수 있는지 — 자산 대비 자본의 비율</p>
+        <div class="pt-panel pt-panel-a" style="text-align:center;">
+          <p style="font-size:11px;color:#8A7362;margin:0 0 2px;">높을수록 좋음</p>
+          <svg viewBox="0 0 200 110" style="width:150px;height:84px;"><path d="M30,100 A70,70 0 0,1 64.3,39.8" fill="none" stroke="#B25444" stroke-width="16"></path><path d="M64.3,39.8 A70,70 0 0,1 133.7,38.7" fill="none" stroke="#C9A227" stroke-width="16"></path><path d="M133.7,38.7 A70,70 0 0,1 170,100" fill="none" stroke="#5B7A52" stroke-width="16"></path><line x1="100" y1="100" x2="46" y2="55.5" stroke="#4A3A2E" stroke-width="3" stroke-linecap="round"></line><circle cx="100" cy="100" r="5" fill="#4A3A2E"></circle></svg>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#B25444;margin-top:-8px;">22</div>
+          <p style="font-size:12px;color:#8A7362;margin:2px 0 0;">전국 하위 22%</p>
+        </div>
+        <div class="pt-panel pt-panel-b" style="text-align:center;">
+          <p style="font-size:11px;color:#8A7362;margin:0 0 2px;">높을수록 좋음</p>
+          <svg viewBox="0 0 200 110" style="width:150px;height:84px;"><path d="M30,100 A70,70 0 0,1 64.3,39.8" fill="none" stroke="#B25444" stroke-width="16"></path><path d="M64.3,39.8 A70,70 0 0,1 133.7,38.7" fill="none" stroke="#C9A227" stroke-width="16"></path><path d="M133.7,38.7 A70,70 0 0,1 170,100" fill="none" stroke="#5B7A52" stroke-width="16"></path><line x1="100" y1="100" x2="32.2" y2="82.6" stroke="#4A3A2E" stroke-width="3" stroke-linecap="round"></line><circle cx="100" cy="100" r="5" fill="#4A3A2E"></circle></svg>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#B25444;margin-top:-8px;">8</div>
+          <p style="font-size:12px;color:#8A7362;margin:2px 0 0;">전국 하위 8%</p>
+        </div>
+      </div>
+    </div>
+    <div class="pt-card" style="position:relative;background:rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.35);box-shadow:0 8px 24px -10px rgba(74,58,46,.15),inset 0 1px 0 rgba(255,255,255,.35);border-radius:12px;padding:20px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;" style-hover="transform:translateY(-4px);box-shadow:0 14px 28px -12px rgba(74,58,46,.3);border-color:#6B4A32;">
+      <input type="radio" name="pt2" id="pt2a" defaultChecked="{{ true }}" style="display:none;">
+      <input type="radio" name="pt2" id="pt2b" style="display:none;">
+      <div class="pt-body">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;">
+          <span style="font-weight:600;font-size:17px;">고정이하여신비율</span>
+          <div style="display:flex;gap:4px;flex:none;">
+            <label for="pt2a" class="pt-tab pt-tab-a" style="font-size:12px;padding:4px 10px;border-radius:20px;cursor:pointer;">2016</label>
+            <label for="pt2b" class="pt-tab pt-tab-b" style="font-size:12px;padding:4px 10px;border-radius:20px;cursor:pointer;">2025</label>
+          </div>
+        </div>
+        <p style="font-size:14px;color:#8A7362;margin:0 0 14px;">떼일 위험이 큰 대출의 비중 — 3개월 이상 연체·회수곤란 대출</p>
+        <div class="pt-panel pt-panel-a" style="text-align:center;">
+          <p style="font-size:11px;color:#8A7362;margin:0 0 2px;">낮을수록 좋음(반전 표시)</p>
+          <svg viewBox="0 0 200 110" style="width:150px;height:84px;"><path d="M30,100 A70,70 0 0,1 64.3,39.8" fill="none" stroke="#B25444" stroke-width="16"></path><path d="M64.3,39.8 A70,70 0 0,1 133.7,38.7" fill="none" stroke="#C9A227" stroke-width="16"></path><path d="M133.7,38.7 A70,70 0 0,1 170,100" fill="none" stroke="#5B7A52" stroke-width="16"></path><line x1="100" y1="100" x2="131.8" y2="37.6" stroke="#4A3A2E" stroke-width="3" stroke-linecap="round"></line><circle cx="100" cy="100" r="5" fill="#4A3A2E"></circle></svg>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#C9A227;margin-top:-8px;">65</div>
+          <p style="font-size:12px;color:#8A7362;margin:2px 0 0;">전국 상위 35%</p>
+        </div>
+        <div class="pt-panel pt-panel-b" style="text-align:center;">
+          <p style="font-size:11px;color:#8A7362;margin:0 0 2px;">낮을수록 좋음(반전 표시)</p>
+          <svg viewBox="0 0 200 110" style="width:150px;height:84px;"><path d="M30,100 A70,70 0 0,1 64.3,39.8" fill="none" stroke="#B25444" stroke-width="16"></path><path d="M64.3,39.8 A70,70 0 0,1 133.7,38.7" fill="none" stroke="#C9A227" stroke-width="16"></path><path d="M133.7,38.7 A70,70 0 0,1 170,100" fill="none" stroke="#5B7A52" stroke-width="16"></path><line x1="100" y1="100" x2="165.1" y2="74.2" stroke="#4A3A2E" stroke-width="3" stroke-linecap="round"></line><circle cx="100" cy="100" r="5" fill="#4A3A2E"></circle></svg>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#5B7A52;margin-top:-8px;">88</div>
+          <p style="font-size:12px;color:#8A7362;margin:2px 0 0;">전국 상위 12%</p>
+        </div>
+      </div>
+    </div>
+    <div class="pt-card" style="position:relative;background:rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.35);box-shadow:0 8px 24px -10px rgba(74,58,46,.15),inset 0 1px 0 rgba(255,255,255,.35);border-radius:12px;padding:20px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;" style-hover="transform:translateY(-4px);box-shadow:0 14px 28px -12px rgba(74,58,46,.3);border-color:#6B4A32;">
+      <input type="radio" name="pt3" id="pt3a" defaultChecked="{{ true }}" style="display:none;">
+      <input type="radio" name="pt3" id="pt3b" style="display:none;">
+      <div class="pt-body">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;">
+          <span style="font-weight:600;font-size:17px;">수지비율</span>
+          <div style="display:flex;gap:4px;flex:none;">
+            <label for="pt3a" class="pt-tab pt-tab-a" style="font-size:12px;padding:4px 10px;border-radius:20px;cursor:pointer;">2016</label>
+            <label for="pt3b" class="pt-tab pt-tab-b" style="font-size:12px;padding:4px 10px;border-radius:20px;cursor:pointer;">2025</label>
+          </div>
+        </div>
+        <p style="font-size:14px;color:#8A7362;margin:0 0 14px;">반기마다 남긴 돈 — 0 아래면 적자</p>
+        <div class="pt-panel pt-panel-a" style="text-align:center;">
+          <p style="font-size:11px;color:#8A7362;margin:0 0 2px;">높을수록 좋음</p>
+          <svg viewBox="0 0 200 110" style="width:150px;height:84px;"><path d="M30,100 A70,70 0 0,1 64.3,39.8" fill="none" stroke="#B25444" stroke-width="16"></path><path d="M64.3,39.8 A70,70 0 0,1 133.7,38.7" fill="none" stroke="#C9A227" stroke-width="16"></path><path d="M133.7,38.7 A70,70 0 0,1 170,100" fill="none" stroke="#5B7A52" stroke-width="16"></path><line x1="100" y1="100" x2="58.85" y2="43.37" stroke="#4A3A2E" stroke-width="3" stroke-linecap="round"></line><circle cx="100" cy="100" r="5" fill="#4A3A2E"></circle></svg>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#B25444;margin-top:-8px;">30</div>
+          <p style="font-size:12px;color:#8A7362;margin:2px 0 0;">전국 하위 30%</p>
+        </div>
+        <div class="pt-panel pt-panel-b" style="text-align:center;">
+          <p style="font-size:11px;color:#8A7362;margin:0 0 2px;">높을수록 좋음</p>
+          <svg viewBox="0 0 200 110" style="width:150px;height:84px;"><path d="M30,100 A70,70 0 0,1 64.3,39.8" fill="none" stroke="#B25444" stroke-width="16"></path><path d="M64.3,39.8 A70,70 0 0,1 133.7,38.7" fill="none" stroke="#C9A227" stroke-width="16"></path><path d="M133.7,38.7 A70,70 0 0,1 170,100" fill="none" stroke="#5B7A52" stroke-width="16"></path><line x1="100" y1="100" x2="42.1" y2="60.65" stroke="#4A3A2E" stroke-width="3" stroke-linecap="round"></line><circle cx="100" cy="100" r="5" fill="#4A3A2E"></circle></svg>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#B25444;margin-top:-8px;">19</div>
+          <p style="font-size:12px;color:#8A7362;margin:2px 0 0;">전국 하위 19%</p>
+        </div>
+      </div>
+    </div>
+    <div class="pt-card" style="position:relative;background:rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.35);box-shadow:0 8px 24px -10px rgba(74,58,46,.15),inset 0 1px 0 rgba(255,255,255,.35);border-radius:12px;padding:20px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;" style-hover="transform:translateY(-4px);box-shadow:0 14px 28px -12px rgba(74,58,46,.3);border-color:#6B4A32;">
+      <input type="radio" name="pt4" id="pt4a" defaultChecked="{{ true }}" style="display:none;">
+      <input type="radio" name="pt4" id="pt4b" style="display:none;">
+      <div class="pt-body">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;">
+          <span style="font-weight:600;font-size:17px;">유동성비율</span>
+          <div style="display:flex;gap:4px;flex:none;">
+            <label for="pt4a" class="pt-tab pt-tab-a" style="font-size:12px;padding:4px 10px;border-radius:20px;cursor:pointer;">2016</label>
+            <label for="pt4b" class="pt-tab pt-tab-b" style="font-size:12px;padding:4px 10px;border-radius:20px;cursor:pointer;">2025</label>
+          </div>
+        </div>
+        <p style="font-size:14px;color:#8A7362;margin:0 0 14px;">단기 상환 대비 당장 쓸 수 있는 돈 — 100%가 기준선</p>
+        <div class="pt-panel pt-panel-a" style="text-align:center;">
+          <p style="font-size:11px;color:#8A7362;margin:0 0 2px;">높을수록 좋음</p>
+          <svg viewBox="0 0 200 110" style="width:150px;height:84px;"><path d="M30,100 A70,70 0 0,1 64.3,39.8" fill="none" stroke="#B25444" stroke-width="16"></path><path d="M64.3,39.8 A70,70 0 0,1 133.7,38.7" fill="none" stroke="#C9A227" stroke-width="16"></path><path d="M133.7,38.7 A70,70 0 0,1 170,100" fill="none" stroke="#5B7A52" stroke-width="16"></path><line x1="100" y1="100" x2="113.12" y2="31.24" stroke="#4A3A2E" stroke-width="3" stroke-linecap="round"></line><circle cx="100" cy="100" r="5" fill="#4A3A2E"></circle></svg>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#C9A227;margin-top:-8px;">56</div>
+          <p style="font-size:12px;color:#8A7362;margin:2px 0 0;">전국 상위 44%</p>
+        </div>
+        <div class="pt-panel pt-panel-b" style="text-align:center;">
+          <p style="font-size:11px;color:#8A7362;margin:0 0 2px;">높을수록 좋음</p>
+          <svg viewBox="0 0 200 110" style="width:150px;height:84px;"><path d="M30,100 A70,70 0 0,1 64.3,39.8" fill="none" stroke="#B25444" stroke-width="16"></path><path d="M64.3,39.8 A70,70 0 0,1 133.7,38.7" fill="none" stroke="#C9A227" stroke-width="16"></path><path d="M133.7,38.7 A70,70 0 0,1 170,100" fill="none" stroke="#5B7A52" stroke-width="16"></path><line x1="100" y1="100" x2="146.29" y2="47.49" stroke="#4A3A2E" stroke-width="3" stroke-linecap="round"></line><circle cx="100" cy="100" r="5" fill="#4A3A2E"></circle></svg>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#5B7A52;margin-top:-8px;">73</div>
+          <p style="font-size:12px;color:#8A7362;margin:2px 0 0;">전국 상위 27%</p>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <p style="font-size:12px;color:#8A7362;margin:10px 0 0;">기준: 0–33 위험 · 34–66 보통 · 67–100 양호 (전국 백분위)</p>
+  <p style="font-size:13px;color:#8A7362;margin:4px 0 0;text-align:right;">탭을 눌러 2016년과 2025년 반기 기준 백분위를 비교해 보세요.</p>
+
+  <p style="font-size:19px;line-height:1.85;margin:24px 0 0;">"전국 하위 8%"처럼 계산 근거가 명확한 수치를 쓴 것은, 산정 기준을 알 수 없는 등급을 우리가 추정해 붙이는 것이 오히려 문제라고 판단했기 때문이다.</p>
+</section>
+
+<!-- 05: 전국 재정건전성 톺아보기 — y2dam/DSJA-Project-Final 원본 디자인 그대로, 스크롤 대신 페이지네이션 -->
+<section id="sec05" style="margin-top:104px;">
+  <p style="font-size:13px;letter-spacing:.1em;color:#6B4A32;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin:0 0 8px;">05</p>
+  <h2 style="font-family:'A2G',serif;font-weight:600;font-size:28px;margin:0 0 16px;">내가 거래하는 조합은 지금 어떤 상태인가</h2>
+  <p style="font-size:19px;line-height:1.85;color:#8A7362;margin:0 0 22px;">농협·신협·수협·산림조합의 공시 지표를 2016년부터 반기 단위로 모았습니다.</p>
+
+  <sc-if value="{{ mapLoading }}" hint-placeholder-val="{{ true }}">
+    <div style="height:420px;display:flex;align-items:center;justify-content:center;background:#EEF5F8;border:1px solid #D9D9D9;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#8A7362;">2,199개 조합의 반기 데이터를 불러오는 중…</span>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ mapLoaded }}" hint-placeholder-val="{{ false }}">
+  <div style="background:rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 24px -12px rgba(74,58,46,.25);border-radius:14px;padding:24px;font-size:16px;line-height:1.6;">
+
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;margin-bottom:18px;font-size:14px;color:#8A7362;text-align:center;">
+      <span>조합 <b style="font-family:'IBM Plex Mono',monospace;color:#4A3A2E;">2,199</b>곳</span>
+      <span>기준 <b style="font-family:'IBM Plex Mono',monospace;color:#4A3A2E;">2025.12</b></span>
+      <span>시점 <b style="font-family:'IBM Plex Mono',monospace;color:#4A3A2E;">20</b>개 반기</span>
+      <span>출처 금융감독원 금융통계정보시스템</span>
+    </div>
+
+    <sc-if value="{{ page1 }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;border:1.5px solid #4A3A2E;background:#EEF5F8;">
+      <input type="text" placeholder="조합 이름을 입력하세요 (예: 강남농협)" value="{{ mapQuery }}" onChange="{{ onMapQueryChange }}" style="flex:1;border:0;background:transparent;padding:12px 14px;font-size:15px;color:#4A3A2E;outline:none;min-width:0;">
+      <span style="padding:12px 14px;font-size:13px;color:#8A7362;white-space:nowrap;border-left:1px solid #D9D9D9;">{{ resultCountLabel }}</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;margin-bottom:20px;">
+      <sc-for list="{{ mapSectChips }}" as="chip" hint-placeholder-count="5">
+        <button onClick="{{ chip.onClick }}" style="font-size:13px;padding:5px 11px;border:1px solid #D9D9D9;cursor:pointer;background:{{ chip.active }};color:#4A3A2E;">{{ chip.label }}</button>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);gap:24px;align-items:start;">
+      <div>
+        <div style="border:1.5px solid #4A3A2E;border-top:0;max-height:420px;overflow-y:auto;background:#EEF5F8;">
+          <sc-for list="{{ orgRows }}" as="org" hint-placeholder-count="10">
+            <button onClick="{{ org.onClick }}" style="display:flex;width:100%;gap:12px;align-items:baseline;text-align:left;padding:10px 15px;border:0;border-top:1px solid #D9D9D9;background:{{ org.bg }};cursor:pointer;font-size:15px;color:#4A3A2E;">
+              <span style="font-weight:500;">{{ org.name }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6B4A32;">{{ org.npl }}</span>
+              <span style="font-size:11px;color:#8A7362;margin-left:auto;white-space:nowrap;">{{ org.sido }} · {{ org.sect }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-family:'A2G',serif;font-weight:500;font-size:16px;margin:0 0 4px;">시도별 부실 확산</h3>
+        <p style="margin:0 0 12px;font-size:13px;color:#8A7362;">떼일 위험이 큰 대출이 5%를 넘는 조합의 비중. 지도를 눌러 지역을 선택하세요.</p>
+        <div style="position:relative;">
+          <svg viewBox="{{ mapViewBox }}" style="display:block;width:100%;height:auto;overflow:visible;">
+            <sc-for list="{{ regionPaths }}" as="rg" hint-placeholder-count="17">
+              <path d="{{ rg.d }}" fill="{{ rg.fill }}" stroke="{{ rg.strokeColor }}" stroke-width="{{ rg.strokeWidth }}" onClick="{{ rg.onClick }}" style="cursor:pointer;transition:filter .12s;" style-hover="filter:brightness(1.15);"></path>
+            </sc-for>
+            <sc-if value="{{ ulleungdo }}" hint-placeholder-val="{{ false }}">
+              <rect x="{{ ulleungdo.frameX }}" y="{{ ulleungdo.frameY }}" width="{{ ulleungdo.frameSize }}" height="{{ ulleungdo.frameSize }}" fill="none" stroke="#4A3A2E" stroke-width="1"></rect>
+              <path d="{{ ulleungdo.d }}" fill="{{ ulleungdo.fill }}" stroke="#EEF5F8" stroke-width="1.2"></path>
+            </sc-if>
+          </svg>
+          <sc-for list="{{ regionLabels }}" as="lb" hint-placeholder-count="17">
+            <span style="position:absolute;left:{{ lb.xPct }}%;top:{{ lb.yPct }}%;transform:translate(-50%,-50%);font-size:11px;font-weight:700;color:#4A3A2E;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff;pointer-events:none;white-space:nowrap;">{{ lb.labelText }}</span>
+          </sc-for>
+          <sc-if value="{{ ulleungdo }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;left:{{ ulleungdo.xPct }}%;top:{{ ulleungdo.yPct }}%;transform:translate(-50%,-50%);font-size:10px;font-weight:700;color:#4A3A2E;text-shadow:0 0 3px #fff,0 0 3px #fff;pointer-events:none;white-space:nowrap;">울릉도*</span>
+          </sc-if>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:12px;font-size:13px;color:#8A7362;">
+          <span>낮음</span>
+          <span style="width:22px;height:10px;display:block;border:1px solid #D9D9D9;background:#F3F4EE;"></span>
+          <span style="width:22px;height:10px;display:block;border:1px solid #D9D9D9;background:#E3D9D0;"></span>
+          <span style="width:22px;height:10px;display:block;border:1px solid #D9D9D9;background:#D7B9AD;"></span>
+          <span style="width:22px;height:10px;display:block;border:1px solid #D9D9D9;background:#C08476;"></span>
+          <span style="width:22px;height:10px;display:block;border:1px solid #D9D9D9;background:#A8322A;"></span>
+          <span>높음</span>
+        </div>
+        <p style="margin:8px 0 0;font-size:11px;color:#8A7362;">* 울릉도는 실제보다 가깝게 옮겨 표시했습니다.</p>
+        <sc-if value="{{ mapSido }}" hint-placeholder-val="{{ false }}">
+          <p style="margin:10px 0 0;font-size:13px;">{{ mapSido }} 필터 적용 중 · <span onClick="{{ clearSido }}" style="text-decoration:underline;cursor:pointer;color:#6B4A32;">해제</span></p>
+        </sc-if>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ page2 }}" hint-placeholder-val="{{ false }}">
+    <sc-if value="{{ selectedOrg }}" hint-placeholder-val="{{ false }}">
+    <div style="background:rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 24px -12px rgba(74,58,46,.25);border-radius:14px;overflow:hidden;">
+      <div style="padding:20px 22px 16px;border-bottom:1px solid rgba(74,58,46,.15);">
+        <p style="font-size:12px;color:#8A7362;letter-spacing:.06em;margin:0 0 4px;">{{ selectedOrg.sido }} · {{ selectedOrg.sect }}</p>
+        <h3 style="font-family:'A2G',serif;font-size:24px;margin:0;font-weight:600;">{{ selectedOrg.name }}</h3>
+        <p style="margin:6px 0 0;font-size:15px;color:#8A7362;">{{ selectedOrg.asof }}</p>
+      </div>
+      <div style="padding:8px 22px 4px;">
+        <sc-for list="{{ selectedOrg.bars }}" as="bar" hint-placeholder-count="4">
+          <div onClick="{{ bar.onClick }}" style="padding:14px 0;border-bottom:1px solid #D9D9D9;cursor:pointer;">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;">
+              <div style="font-size:16px;font-weight:600;">{{ bar.label }}<span style="font-weight:400;color:#8A7362;font-size:13px;margin-left:7px;">{{ bar.sub }}</span></div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;">{{ bar.valText }}</div>
+            </div>
+            <div style="position:relative;height:8px;background:#DDE7EC;margin-top:8px;">
+              <div style="position:absolute;inset:0 auto 0 0;background:{{ bar.trackColor }};width:{{ bar.pctWidth }}%;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:13px;color:#8A7362;">
+              <span style="color:{{ bar.rankColor }};">{{ bar.rankText }}</span>
+              <span>{{ bar.dirText }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="padding:0 22px 20px;">
+        <div style="margin:14px 0 0;padding:14px 16px;background:#E3ECEF;border-left:3px solid #D9D9D9;">
+          <h4 style="margin:0 0 10px;font-size:14px;letter-spacing:.04em;font-weight:600;">규제는 어디서 작동하나</h4>
+          <sc-if value="{{ selectedOrg.axis }}" hint-placeholder-val="{{ false }}">
+            <div style="position:relative;height:32px;margin:22px 4px 0;">
+              <div style="position:absolute;top:15px;left:0;right:0;height:1px;background:#D9D9D9;"></div>
+              <div style="position:absolute;top:8px;left:8%;width:1px;height:13px;background:#6B4A32;"></div>
+              <span style="position:absolute;top:-4px;left:8%;transform:translate(-50%,-100%);font-size:11px;color:#6B4A32;white-space:nowrap;">발동선 2%</span>
+              <div style="position:absolute;top:10px;width:10px;height:10px;border-radius:50%;background:#4A3A2E;transform:translateX(-50%);left:{{ selectedOrg.axis.dotPct }}%;"></div>
+              <span style="position:absolute;top:24px;transform:translateX(-50%);left:{{ selectedOrg.axis.dotPct }}%;font-size:11px;color:#4A3A2E;white-space:nowrap;">이 조합 {{ selectedOrg.axis.netLabel }}</span>
+            </div>
+          </sc-if>
+          <p style="margin:14px 0 0;font-size:13px;color:#8A7362;line-height:1.6;">{{ selectedOrg.gaugeNote }}</p>
+        </div>
+        <div style="margin:20px 0 0;padding-top:16px;border-top:2px solid #4A3A2E;">
+          <h4 style="margin:0 0 3px;font-size:15px;font-weight:600;letter-spacing:.03em;">경영관리 (M)</h4>
+          <p style="margin:0 0 12px;font-size:12px;color:#8A7362;">계량 산출이 불가능한 부문입니다. 대신 공시된 기관제재·임원문책 기록을 표시합니다.</p>
+          <p style="margin:0;padding:18px;border:1px dashed #D9D9D9;text-align:center;color:#8A7362;font-size:13px;background:#F1F2EC;min-height:80px;display:flex;align-items:center;justify-content:center;">제재 내역을 입력하세요</p>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ page3 }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;">
+      <sc-for list="{{ metricTabs }}" as="tab" hint-placeholder-count="5">
+        <button onClick="{{ tab.onClick }}" style="font-size:13px;padding:6px 12px;border:1px solid #D9D9D9;cursor:pointer;background:{{ tab.bgColor }};color:#4A3A2E;">{{ tab.label }}</button>
+      </sc-for>
+    </div>
+    <sc-if value="{{ trend }}" hint-placeholder-val="{{ false }}">
+    <div style="background:rgba(255,255,255,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 24px -12px rgba(74,58,46,.25);border-radius:14px;padding:16px;">
+      <div style="position:relative;">
+        <svg viewBox="{{ trend.viewBox }}" style="display:block;width:100%;height:auto;">
+          <sc-for list="{{ trend.gridLines }}" as="gl" hint-placeholder-count="5">
+            <line x1="54" y1="{{ gl.y }}" x2="784" y2="{{ gl.y }}" stroke="#D9D9D9" stroke-width="0.6"></line>
+          </sc-for>
+          <path d="{{ trend.d }}" fill="none" stroke="#4A3A2E" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"></path>
+        </svg>
+        <sc-for list="{{ trend.gridLines }}" as="gl" hint-placeholder-count="5">
+          <span style="position:absolute;left:0%;top:{{ gl.yPct }}%;transform:translateY(-50%);font-size:11px;color:#8A7362;font-family:'IBM Plex Mono',monospace;white-space:nowrap;">{{ gl.label }}</span>
+        </sc-for>
+        <sc-for list="{{ trend.yearTicks }}" as="yt" hint-placeholder-count="10">
+          <span style="position:absolute;left:{{ yt.xPct }}%;top:90%;transform:translateX(-50%);font-size:10px;color:#8A7362;font-family:'IBM Plex Mono',monospace;white-space:nowrap;">{{ yt.year }}</span>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:0 32px;margin:14px 0 0;padding-top:14px;border-top:2px solid #D9D9D9;font-size:13px;color:#8A7362;">
+        <div>{{ trend.firstLabel }}<b style="display:block;font-family:'IBM Plex Mono',monospace;font-size:17px;color:#4A3A2E;margin-top:3px;">{{ trend.firstVal }}</b></div>
+        <div>{{ trend.lastLabel }}<b style="display:block;font-family:'IBM Plex Mono',monospace;font-size:17px;margin-top:3px;color:{{ trend.lastColor }};">{{ trend.lastVal }}</b></div>
+        <div>최고<b style="display:block;font-family:'IBM Plex Mono',monospace;font-size:17px;color:#4A3A2E;margin-top:3px;">{{ trend.max }}</b></div>
+        <div>최저<b style="display:block;font-family:'IBM Plex Mono',monospace;font-size:17px;color:#4A3A2E;margin-top:3px;">{{ trend.min }}</b></div>
+      </div>
+      <p style="margin:14px 0 0;padding:12px 14px;background:#E3ECEF;border-left:4px solid #6B4A32;font-size:13px;line-height:1.6;">{{ trend.note }}</p>
+    </div>
+    </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ page4 }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <h3 style="font-family:'A2G',serif;font-weight:500;font-size:16px;margin:0 0 4px;">전국 요약</h3>
+      <p style="margin:0 0 14px;font-size:13px;color:#8A7362;">{{ sumCap }}</p>
+      <sc-for list="{{ summaryRows }}" as="row" hint-placeholder-count="5">
+        <div style="display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid #D9D9D9;font-size:15px;font-weight:600;">
+          <span style="font-weight:400;font-size:14px;">{{ row.label }}</span>
+          <span>{{ row.from }} → <span style="color:{{ row.toColor }};">{{ row.to }}</span></span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="margin-top:28px;padding-top:18px;border-top:1px solid #D9D9D9;">
+      <h3 style="font-family:'A2G',serif;font-weight:500;font-size:16px;margin:0 0 4px;">권역별 차이</h3>
+      <p style="margin:0 0 14px;font-size:13px;color:#8A7362;">같은 상호금융인데 상태가 다릅니다</p>
+      <sc-for list="{{ sectorRows }}" as="s" hint-placeholder-count="4">
+        <div style="display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid #D9D9D9;font-size:15px;font-weight:600;">
+          <span style="font-weight:400;font-size:14px;">{{ s.sect }} <em style="font-style:normal;color:#8A7362;">{{ s.count }}곳</em></span>
+          <span style="font-size:14px;">자기자본 {{ s.cap }}% · 순손실 {{ s.loss }}%</span>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ page5 }}" hint-placeholder-val="{{ false }}">
+    <div style="font-size:14px;color:#8A7362;line-height:1.75;">
+      <p style="margin:0 0 14px;"><strong style="color:#4A3A2E;">이 지표는 무엇인가.</strong> 감독당국이 조합을 평가할 때 쓰는 CAMEL 다섯 부문 가운데 계량 산출이 가능한 네 부문(자본·자산건전성·수익성·유동성)을 공시 자료로 재구성한 것입니다. 경영관리(M)는 비계량 평가 항목이라 산출할 수 없어, 대신 공시된 제재 기록을 함께 표시합니다.</p>
+      <p style="margin:0 0 14px;"><strong style="color:#4A3A2E;">감독당국의 경영실태평가 등급이 아닙니다.</strong> 등급 산정에 쓰이는 계량지표 등급구분기준은 상호금융업감독업무시행세칙 제12조의4제7항에 따라 감독원장이 별도로 정하며, 공표되지 않습니다. 같은 위임 구조인 새마을금고는 감독기준 별표3·별표4로 이를 공개하고 있습니다.</p>
+      <p style="margin:0 0 14px;"><strong style="color:#4A3A2E;">순자본비율은 근사 산출값입니다.</strong> 감독규정 별표5 산식을 공시 항목으로 재현한 값으로, 농협에서는 공시값과 소수점 둘째자리까지 일치를 확인했습니다. 신협은 후순위차입금이 공개 통계에 없어 실제보다 낮게 산출될 수 있습니다.</p>
+      <p style="margin:0;">자료 · 금융감독원 금융통계정보시스템(FISIS). 제재 기록은 각 조합 정기공시 「기관제재 및 임원문책 사항」 항목.</p>
+    </div>
+    </sc-if>
+
+    <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:24px;padding-top:18px;border-top:2px solid #4A3A2E;">
+      <button onClick="{{ mapPrev }}" style="padding:8px 16px;border:1px solid #4A3A2E;background:#EEF5F8;color:#4A3A2E;font-size:13px;cursor:pointer;opacity:{{ mapPrevOpacity }};">← 이전</button>
+      <div style="display:flex;gap:7px;">
+        <sc-for list="{{ mapPageDots }}" as="dot" hint-placeholder-count="5">
+          <button onClick="{{ dot.onClick }}" style="width:9px;height:9px;border-radius:50%;border:1px solid #4A3A2E;padding:0;cursor:pointer;background:{{ dot.bg }};"></button>
+        </sc-for>
+      </div>
+      <span style="font-size:12px;color:#8A7362;min-width:150px;text-align:center;">{{ mapPageLabel }}</span>
+      <button onClick="{{ mapNext }}" style="padding:8px 16px;border:1px solid #4A3A2E;background:#4A3A2E;color:#fff;font-size:13px;cursor:pointer;opacity:{{ mapNextOpacity }};">다음 →</button>
+    </div>
+  </div>
+  </sc-if>
+</section>
+
+<footer style="margin-top:64px;padding-top:22px;border-top:2px solid #4A3A2E;font-size:13px;color:#8A7362;position:relative;z-index:1;">
+  <p style="margin:0 0 9px;line-height:1.7;">자료 · 금융감독원 금융통계정보시스템(FISIS). 지역농협 경영공시 원문 전수 분석(2018~2026, 17,233건).</p>
+  <p style="margin:0;line-height:1.7;">이 기사는 초안이며, 실제 게재 전 데이터 검증 및 편집 과정을 거칩니다.</p>
+</footer>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { playState: 'paused', progress: 0, mapLoading: true, mapLoaded: false, mapQuery: '', mapSect: '', mapSido: null, mapSelectedCode: null, mapMetric: 'cap', mapPage: 0, activeSec: 'sec01' };
+  navList = [
+    { id: 'sec01', label: '공시된 숫자만으로' },
+    { id: 'sec02', label: '읽을 수 없는 파일' },
+    { id: 'sec03', label: '너무 많은 숫자' },
+    { id: 'sec04', label: '전국 건전성 비교' },
+    { id: 'sec05', label: '내 조합은 지금' }
+  ];
+  mapPageMeta = [
+    { label: '검색 · 지도 · 조합 목록' },
+    { label: '조합 상세' },
+    { label: '추이 그래프' },
+    { label: '전국 요약 · 권역별 차이' },
+    { label: '방법론' }
+  ];
+  scanRef = React.createRef();
+  statsRef = React.createRef();
+  statsStarted = false;
+  cells = this.buildCells();
+
+  buildCells() {
+    const cols = 22, total = cols * 6, sweepDur = 12;
+    const brickCount = Math.round(total * 0.426);
+    const idx = Array.from({ length: total }, (_, i) => i);
+    for (let i = idx.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [idx[i], idx[j]] = [idx[j], idx[i]];
+    }
+    const brickSet = new Set(idx.slice(0, brickCount));
+    const cells = [];
+    for (let i = 0; i < total; i++) {
+      const col = i % cols;
+      const isBrick = brickSet.has(i);
+      const delay = (((col + 0.5) / cols) * sweepDur).toFixed(2);
+      cells.push({ key: i, color: isBrick ? '#B25444' : '#D8CFC5', anim: isBrick ? `cellFlicker ${sweepDur}s ease-in-out ${delay}s infinite` : 'none' });
+    }
+    return cells;
+  }
+
+  componentDidMount() {
+    const el = this.scanRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      this.setState({ playState: 'running' });
+    } else {
+      this.obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => this.setState({ playState: entry.isIntersecting ? 'running' : 'paused' }));
+      }, { threshold: 0.35 });
+      this.obs.observe(el);
+    }
+    const statsEl = this.statsRef.current;
+    if (statsEl && typeof IntersectionObserver !== 'undefined') {
+      this.statsObs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !this.statsStarted) {
+            this.statsStarted = true;
+            this.runCountUp();
+            this.statsObs.disconnect();
+          }
+        });
+      }, { threshold: 0.35 });
+      this.statsObs.observe(statsEl);
+    }
+    this.onScroll = () => {
+      const y = window.scrollY + 100;
+      let current = this.navList[0].id;
+      for (const n of this.navList) {
+        const el = document.getElementById(n.id);
+        if (el && el.getBoundingClientRect().top + window.scrollY <= y) current = n.id;
+      }
+      if (current !== this.state.activeSec) this.setState({ activeSec: current });
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    this.onScroll();
+    Promise.all([import('./map-data.js'), import('./map-geo.js')]).then(([dataMod, geoMod]) => {
+      this.mapMod = dataMod;
+      this.geo = this.buildKoreaMap(dataMod.D, geoMod.KOREA_GEOJSON);
+      this.orgs = dataMod.D.orgs;
+      this.orgByCode = new Map(this.orgs.map((o) => [o[0], o]));
+      this.pickDefaultOrg(dataMod.D);
+      this.setState({ mapLoading: false, mapLoaded: true });
+    }).catch((e) => { console.error(e); this.setState({ mapLoading: false }); });
+  }
+
+  runCountUp() {
+    const duration = 1300;
+    const start = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      this.setState({ progress: eased });
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  componentWillUnmount() {
+    if (this.obs) this.obs.disconnect();
+    if (this.statsObs) this.statsObs.disconnect();
+    if (this.onScroll) window.removeEventListener('scroll', this.onScroll);
+  }
+
+  pickDefaultOrg(D) {
+    let best = null, bs = -1;
+    D.orgs.forEach((o) => {
+      const pn = o[4][1], pc = o[4][0];
+      if (pn === null || pc === null) return;
+      const s = (100 - pn) + pc;
+      if (pn < 10 && pc > 60 && s > bs) { bs = s; best = o; }
+    });
+    this.defaultCode = (best || D.orgs[0])[0];
+  }
+
+  toRad(d) { return (d * Math.PI) / 180; }
+  rawProject(pt) { return [this.toRad(pt[0]), -Math.log(Math.tan(Math.PI / 4 + this.toRad(pt[1]) / 2))]; }
+  ringsOfPolygon(coords) { return coords; }
+  ringsOfMultiPolygon(coords) { return coords.reduce((a, p) => a.concat(p), []); }
+  fitParams(pts, w, h) {
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    pts.forEach(([x, y]) => { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; });
+    const dx = (maxX - minX) || 1, dy = (maxY - minY) || 1;
+    const k = Math.min(w / dx, h / dy);
+    return { k, tx: w / 2 - k * (minX + maxX) / 2, ty: h / 2 - k * (minY + maxY) / 2 };
+  }
+  pathFromRings(rings) {
+    return rings.map((ring) => 'M' + ring.map((p) => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('L') + 'Z').join(' ');
+  }
+
+  buildKoreaMap(D, geo) {
+    const GEO_NAME_TO_KEY = {
+      '서울특별시': '서울', '부산광역시': '부산', '대구광역시': '대구', '인천광역시': '인천',
+      '광주광역시': '광주', '대전광역시': '대전', '울산광역시': '울산', '세종특별자치시': '세종',
+      '경기도': '경기', '강원도': '강원', '충청북도': '충북', '충청남도': '충남',
+      '전라북도': '전북', '전라남도': '전남', '경상북도': '경북', '경상남도': '경남', '제주특별자치도': '제주'
+    };
+    const LABEL_NUDGE = { '인천': [-41, 13], '서울': [0, -10], '경기': [30, 32], '세종': [-20, -26], '충북': [24, 2], '충남': [-45, 7], '부산': [10, 10] };
+    const features = geo.features;
+    const gb = features.find((f) => f.properties.name === '경상북도');
+    const gbPolys = gb.geometry.coordinates;
+    const ulleungdoPolygon = gbPolys[1];
+
+    const getRings = (f) => {
+      const g = f.geometry;
+      if (f.properties.name === '경상북도') return this.ringsOfMultiPolygon([gbPolys[0]]);
+      if (g.type === 'MultiPolygon') return this.ringsOfMultiPolygon(g.coordinates);
+      return this.ringsOfPolygon(g.coordinates);
+    };
+
+    const rawByFeature = features.map((f) => ({ f, rings: getRings(f).map((ring) => ring.map((pt) => this.rawProject(pt))) }));
+    const allPts = [];
+    rawByFeature.forEach(({ rings }) => rings.forEach((r) => r.forEach((p) => allPts.push(p))));
+    const W = 600, H = 680;
+    const fit = this.fitParams(allPts, W * 1.08, H);
+    const k = fit.k, tx = fit.tx - 24, ty = fit.ty;
+    const proj = (p) => [k * p[0] + tx, k * p[1] + ty];
+
+    const regionPaths = [];
+    const regionLabels = [];
+    let jejuCenter = null;
+    rawByFeature.forEach(({ f, rings }) => {
+      const key = GEO_NAME_TO_KEY[f.properties.name];
+      const v = key && D.sido[key];
+      const screenRings = rings.map((ring) => ring.map(proj));
+      const d = this.pathFromRings(screenRings);
+      const largest = screenRings.reduce((a, b) => (b.length > a.length ? b : a), screenRings[0] || []);
+      let cx = 0, cy = 0;
+      largest.forEach((p) => { cx += p[0]; cy += p[1]; });
+      cx /= largest.length || 1; cy /= largest.length || 1;
+      if (key === '제주') jejuCenter = [cx, cy];
+      const nudge = LABEL_NUDGE[key] || [0, 0];
+      regionPaths.push({
+        sido: key || f.properties.name, d,
+        fill: v ? this.mapMod.sev(v[3]) : '#D9D9D9',
+        onClick: v ? () => this.toggleSido(key) : null
+      });
+      if (v || key === '세종') {
+        const lx = cx + nudge[0], ly = cy + nudge[1];
+        regionLabels.push({ labelText: v ? `${key} ${v[3]}%` : key, xPct: (lx / W) * 100, yPct: (ly / H) * 100 });
+      }
+    });
+
+    let ulleungdo = null;
+    if (jejuCenter && ulleungdoPolygon) {
+      const insetCx = jejuCenter[0] + 74, insetCy = jejuCenter[1] - 6;
+      const uRings = this.ringsOfPolygon(ulleungdoPolygon).map((ring) => ring.map((pt) => this.rawProject(pt)));
+      const uPts = [];
+      uRings.forEach((r) => r.forEach((p) => uPts.push(p)));
+      const uFit = this.fitParams(uPts, 26, 26);
+      const offX = insetCx - 13, offY = insetCy - 13;
+      const uScreen = uRings.map((ring) => ring.map((p) => [uFit.k * p[0] + uFit.tx + offX, uFit.k * p[1] + uFit.ty + offY]));
+      const gyeongbuk = D.sido['경북'];
+      ulleungdo = {
+        d: this.pathFromRings(uScreen),
+        fill: gyeongbuk ? this.mapMod.sev(gyeongbuk[3]) : '#D9D9D9',
+        frameX: insetCx - 21, frameY: insetCy - 21, frameSize: 42,
+        xPct: (insetCx / W) * 100, yPct: ((insetCy + 33) / H) * 100
+      };
+    }
+    return { regionPaths, regionLabels, ulleungdo, viewBox: `0 0 ${W} ${H}` };
+  }
+
+  toggleSido(key) { this.setState({ mapSido: this.state.mapSido === key ? null : key }); }
+  selectOrg(code) { this.setState({ mapSelectedCode: code }); }
+
+  getFilteredOrgs() {
+    if (!this.orgs) return [];
+    let list = this.orgs;
+    if (this.state.mapSido) list = list.filter((o) => o[3] === this.state.mapSido);
+    if (this.state.mapSect) list = list.filter((o) => o[2] === this.state.mapSect);
+    const q = this.state.mapQuery.trim();
+    if (q) list = list.filter((o) => o[1].includes(q));
+    return list;
+  }
+
+  buildOrgDetail(D, o) {
+    const li = D.ym.length - 1;
+    const bars = D.spec.slice(0, 4).map((sp) => {
+      const [k, lab, sub, unit, dir] = sp;
+      const idx = D.spec.indexOf(sp);
+      const v = o[5 + idx][li], p = o[4][idx];
+      const warn = p !== null && p < 35;
+      const valText = v === null ? '—' : (k === 'pro' ? (v < 0 ? '−' : '') + Math.abs(v).toFixed(1) + '억' : v + unit);
+      const rankText = p === null ? '순위 없음' : (p >= 50 ? `전국 상위 ${(100 - p).toFixed(1)}%` : `전국 하위 ${p.toFixed(1)}%`);
+      return {
+        key: k, label: lab, sub, valText,
+        pctWidth: p === null ? 0 : p,
+        trackColor: warn ? '#6B4A32' : '#A8A8A8',
+        rankColor: warn ? '#6B4A32' : '#8A7362',
+        rankText, dirText: dir === 'high' ? '높을수록 양호' : '낮을수록 양호',
+        onClick: () => this.setState({ mapMetric: k, mapPage: 2 })
+      };
+    });
+    const netIdx = D.spec.findIndex((s) => s[0] === 'net');
+    const net = o[5 + netIdx][li];
+    let axis = null, gaugeNote;
+    if (net !== null && net !== undefined) {
+      const pos = Math.max(4, Math.min(92, 8 + (net / 20) * 84));
+      axis = { dotPct: pos, netLabel: net + '%' };
+      const nplIdx = D.spec.findIndex((s) => s[0] === 'npl');
+      const npl = o[5 + nplIdx][li], pn = o[4][nplIdx];
+      gaugeNote = `떼일 위험이 큰 대출이 ${npl}%로 전국 ${pn < 50 ? '하위 ' + pn.toFixed(1) : '상위 ' + (100 - pn).toFixed(1)}%인데, 적기시정조치가 발동되는 순자본비율은 ${net}%입니다. 기준선(2%)의 ${(net / 2).toFixed(1)}배입니다. 경보를 울리는 지표와 실제 상태를 재는 지표가 다릅니다.`;
+    } else {
+      gaugeNote = '순자본비율을 산출할 수 없는 조합입니다.';
+    }
+    return {
+      name: o[1], sect: o[2], sido: o[3],
+      asof: `2025년 12월말 결산 기준 · 전국 ${D.orgs.length.toLocaleString('en-US')}곳 중 순위`,
+      bars, axis, gaugeNote
+    };
+  }
+
+  ymLab(y) { return y.slice(0, 4) + '년 ' + (y.slice(4) === '12' ? '하반기' : '상반기'); }
+
+  buildTrendChart(D, o, key) {
+    const idx = D.spec.findIndex((s) => s[0] === key);
+    if (idx < 0) return null;
+    const sp = D.spec[idx];
+    const series = o[5 + idx];
+    const ym = D.ym;
+    const pts = series.map((v, j) => [j, v]).filter((p) => p[1] !== null && p[1] !== undefined);
+    if (!pts.length) return null;
+    let lo = Math.min(...pts.map((p) => p[1])), hi = Math.max(...pts.map((p) => p[1]));
+    if (lo > 0 && key !== 'pro') lo = 0;
+    const pad = (hi - lo) * 0.16 || 1; hi += pad; lo -= pad;
+    const W = 800, H = 260, PL = 54, PR = 16, PT = 16, PB = 40;
+    const X = (j) => PL + (W - PL - PR) * j / (series.length - 1);
+    const Y = (y) => PT + (H - PT - PB) * (1 - (y - lo) / (hi - lo));
+    const gridLines = [0, 1, 2, 3, 4].map((t) => {
+      const yv = lo + (hi - lo) * t / 4;
+      const yy = Y(yv);
+      return { y: yy.toFixed(1), yPct: (yy / H) * 100, label: yv.toFixed(1) };
+    });
+    const yearTicks = ym.map((y, j) => ({ x: X(j).toFixed(1), xPct: (X(j) / W) * 100, half: y.slice(4) === '12', year: y.slice(0, 4) })).filter((t) => t.half);
+    const d = pts.map((p, j) => (j ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join(' ');
+    const first = pts[0][1], last = pts[pts.length - 1][1];
+    const worse = sp[4] === 'high' ? last < first : last > first;
+    const sfx = (u) => (u === '%' ? '%' : '억');
+    return {
+      viewBox: `0 0 ${W} ${H}`, d, gridLines, yearTicks,
+      firstLabel: this.ymLab(ym[pts[0][0]]), firstVal: first + sfx(sp[3]),
+      lastLabel: this.ymLab(ym[pts[pts.length - 1][0]]), lastVal: last + sfx(sp[3]),
+      lastColor: worse ? '#6B4A32' : '#4A3A2E',
+      max: Math.max(...pts.map((p) => p[1])), min: Math.min(...pts.map((p) => p[1])),
+      note: this.mapMod.NOTE[key]
+    };
+  }
+
+  renderVals() {
+    const p = this.state.progress;
+    const circumference = 251.3;
+    const base = {
+      scanRef: this.scanRef, playState: this.state.playState, cells: this.cells, statsRef: this.statsRef,
+      donutDasharray: `${(p * 0.65 * circumference).toFixed(1)} ${circumference}`,
+      pctText: `${Math.round(p * 65)}%`,
+      count1913Text: `${Math.round(p * 1913).toLocaleString('en-US')}개`,
+      count126Text: `${Math.round(p * 126)}건`,
+      mapLoading: this.state.mapLoading, mapLoaded: this.state.mapLoaded,
+      mapQuery: this.state.mapQuery,
+      onMapQueryChange: (e) => this.setState({ mapQuery: e.target.value }),
+      mapSido: this.state.mapSido,
+      clearSido: () => this.setState({ mapSido: null }),
+      navItems: this.navList.map((n) => {
+        const active = this.state.activeSec === n.id;
+        return {
+          href: `#${n.id}`, label: n.label, weight: active ? 700 : 400, color: active ? '#4A3A2E' : '#8A736299',
+          onClick: (e) => {
+            e.preventDefault();
+            const el = document.getElementById(n.id);
+            if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 24, behavior: 'smooth' });
+          }
+        };
+      })
+    };
+    if (!this.state.mapLoaded) return base;
+    const D = this.mapMod.D;
+    const page = this.state.mapPage;
+    for (let i = 0; i < 5; i++) base[`page${i + 1}`] = page === i;
+    base.mapPrevOpacity = page === 0 ? '0.4' : '1';
+    base.mapNextOpacity = page === 4 ? '0.4' : '1';
+    base.mapPrev = () => this.setState({ mapPage: Math.max(0, page - 1) });
+    base.mapNext = () => this.setState({ mapPage: Math.min(4, page + 1) });
+    base.mapPageLabel = this.mapPageMeta[page].label;
+    base.mapPageDots = this.mapPageMeta.map((m, i) => ({ bg: i === page ? '#4A3A2E' : '#EEF5F8', onClick: () => this.setState({ mapPage: i }) }));
+
+    const sects = [...new Set(D.orgs.map((o) => o[2]))];
+    base.mapSectChips = [{ label: '전체', value: '' }, ...sects.map((s) => ({ label: s, value: s }))].map((c) => ({
+      label: c.label, active: this.state.mapSect === c.value ? '#D9D9D9' : '#EEF5F8', onClick: () => this.setState({ mapSect: c.value })
+    }));
+
+    base.regionPaths = this.geo.regionPaths.map((r) => ({
+      ...r,
+      strokeColor: this.state.mapSido === r.sido ? '#4A3A2E' : '#EEF5F8',
+      strokeWidth: this.state.mapSido === r.sido ? 3.2 : 1.6
+    }));
+    base.regionLabels = this.geo.regionLabels;
+    base.ulleungdo = this.geo.ulleungdo;
+    base.mapViewBox = this.geo.viewBox;
+
+    const filtered = this.getFilteredOrgs();
+    base.resultCountLabel = filtered.length.toLocaleString('en-US') + '곳';
+    const li = D.ym.length - 1;
+    const nplIdx = D.spec.findIndex((s) => s[0] === 'npl');
+    base.orgRows = filtered.slice(0, 60).map((o) => {
+      const npl = o[5 + nplIdx][li];
+      const active = this.state.mapSelectedCode === o[0];
+      return { code: o[0], name: o[1], sido: o[3], sect: o[2], npl: npl === null ? '—' : npl + '%', bg: active ? '#E3ECEF' : 'transparent', onClick: () => this.selectOrg(o[0]) };
+    });
+
+    const selCode = this.state.mapSelectedCode || this.defaultCode;
+    const org = selCode && this.orgByCode.get(selCode);
+    if (org) {
+      base.selectedOrg = this.buildOrgDetail(D, org);
+      base.trend = this.buildTrendChart(D, org, this.state.mapMetric);
+    }
+    base.metricTabs = D.spec.map((sp) => ({ key: sp[0], label: sp[1], bgColor: this.state.mapMetric === sp[0] ? '#D9D9D9' : '#EEF5F8', onClick: () => this.setState({ mapMetric: sp[0] }) }));
+
+    const t0 = D.trend[Math.max(D.trend.length - 5, 0)], t1 = D.trend[D.trend.length - 1];
+    base.sumCap = `${t0[0]}년 12월 → ${t1[0]}년 12월 · 4개 권역 합산`;
+    base.summaryRows = [
+      { label: '부실 대출 비율 중앙값', from: t0[2] + '%', to: t1[2] + '%', toColor: '#6B4A32' },
+      { label: '부실 5% 넘는 조합', from: t0[3], to: t1[3] + '곳', toColor: '#6B4A32' },
+      { label: '부실 10% 넘는 조합', from: t0[4], to: t1[4] + '곳', toColor: '#6B4A32' },
+      { label: '반기 순손실 조합', from: t0[6], to: t1[6] + '곳', toColor: '#6B4A32' },
+      { label: '자기자본비율 중앙값', from: t0[5] + '%', to: t1[5] + '%', toColor: '#4A3A2E' }
+    ];
+    base.sectorRows = D.sect.map((s) => ({ sect: s[0], count: s[1].toLocaleString('en-US'), cap: s[2], loss: s[4] }));
+
+    return base;
+  }
+}
+</script>
+</body>
+</html>
