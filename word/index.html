@@ -2919,7 +2919,10 @@ footer strong{color:var(--ink);font-weight:700}
     var b=ev.target.closest('[data-goto]');
     if(!b) return;
     var el=document.getElementById('screen'+b.dataset.goto);
-    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    if(!el) return;
+    var offset=stepper?stepper.offsetHeight:0;
+    var top=el.getBoundingClientRect().top+window.scrollY-offset;
+    window.scrollTo({top:top, behavior:'smooth'});
   });
   function onScroll(){
     var maxScroll=document.documentElement.scrollHeight-window.innerHeight;
