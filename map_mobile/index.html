@@ -16,6 +16,8 @@
 @font-face{font-family:"A2G";src:url("a2g-medium.ttf") format("truetype");font-weight:500;font-display:swap}
 @font-face{font-family:"A2G";src:url("a2g-semibold.ttf") format("truetype");font-weight:600;font-display:swap}
 body{margin:0}
+a{color:#6B4A32}
+a:hover{color:#4A3A2E}
 </style>
 </helmet>
 
@@ -23,7 +25,7 @@ body{margin:0}
 <div style="max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px) 80px;">
 
 <header style="padding:52px 0 26px;border-bottom:2px solid #4A3A2E;text-align:center;">
-  <h1 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(30px,5.4vw,50px);line-height:1.15;margin:0 0 14px;letter-spacing:-.01em;word-break:keep-all;">전국 재정건전성 톺아보기</h1>
+  <h1 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(30px,5.4vw,50px);line-height:1.15;margin:0 0 14px;letter-spacing:-.01em;word-break:keep-all;">전국 재무건전성 톺아보기</h1>
   <p style="margin:0 auto;color:#8A7362;max-width:58ch;font-size:19px;word-break:keep-all;">내가 거래하는 조합은 지금 어떤 상태인가.<br>농협·신협·수협·산림조합의 공시 지표를 2016년부터 반기 단위로 모았습니다.</p>
 
   <sc-if value="{{ mapLoaded }}" hint-placeholder-val="{{ false }}">
@@ -72,8 +74,8 @@ body{margin:0}
 </sc-if>
 
 <sc-if value="{{ mapLoaded }}" hint-placeholder-val="{{ false }}">
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;margin-top:38px;">
-  <main style="order:{{ mainOrder }};">
+<div style="display:grid;grid-template-columns:{{ gridCols }};grid-template-areas:{{ gridAreas }};gap:44px;margin-top:38px;">
+  <main style="grid-area:main;">
     <sc-if value="{{ selectedOrg }}" hint-placeholder-val="{{ false }}">
     <div style="background:#EEF5F8;border:1px solid #D9D9D9;position:relative;">
       <div style="position:relative;padding:22px 60px 18px 24px;border-bottom:1px solid #D9D9D9;">
@@ -137,7 +139,7 @@ body{margin:0}
     </sc-if>
   </main>
 
-  <aside style="order:{{ asideOrder }};">
+  <div style="grid-area:map;">
     <h3 style="font-family:'A2G',serif;font-weight:500;font-size:18px;margin:0 0 4px;">시도별 부실 확산</h3>
     <p style="margin:0 0 16px;font-size:16px;color:#8A7362;word-break:keep-all;">떼일 위험이 큰 대출이 5%를 넘는 조합의 비중. 지도를 눌러 지역을 선택하세요.</p>
     <div style="position:relative;">
@@ -170,8 +172,9 @@ body{margin:0}
     <sc-if value="{{ mapSido }}" hint-placeholder-val="{{ false }}">
       <p style="margin:10px 0 0;font-size:16px;">{{ mapSido }} 필터 적용 중 · <span onClick="{{ clearSido }}" style="text-decoration:underline;cursor:pointer;color:#6B4A32;">해제</span></p>
     </sc-if>
+  </div>
 
-    <div style="margin-top:38px;padding-top:24px;border-top:1px solid #D9D9D9;">
+    <div style="grid-area:summary;">
       <h3 style="font-family:'A2G',serif;font-weight:500;font-size:18px;margin:0 0 4px;">전국 요약</h3>
       <p style="margin:0 0 16px;font-size:16px;color:#8A7362;">{{ sumCap }}</p>
       <sc-for list="{{ summaryRows }}" as="row" hint-placeholder-count="5">
@@ -181,7 +184,7 @@ body{margin:0}
         </div>
       </sc-for>
     </div>
-    <div style="margin-top:38px;padding-top:24px;border-top:1px solid #D9D9D9;">
+    <div style="grid-area:sector;margin-top:38px;padding-top:24px;border-top:1px solid #D9D9D9;">
       <h3 style="font-family:'A2G',serif;font-weight:500;font-size:18px;margin:0 0 4px;">권역별 차이</h3>
       <p style="margin:0 0 16px;font-size:16px;color:#8A7362;">같은 상호금융인데 상태가 다릅니다</p>
       <sc-for list="{{ sectorRows }}" as="s" hint-placeholder-count="4">
@@ -191,7 +194,6 @@ body{margin:0}
         </div>
       </sc-for>
     </div>
-  </aside>
 </div>
 
 <footer style="margin-top:54px;padding-top:22px;border-top:2px solid #4A3A2E;font-size:14px;color:#8A7362;">
@@ -261,7 +263,6 @@ body{margin:0}
   </div>
 </div>
 </sc-if>
-
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
@@ -556,8 +557,8 @@ class Component extends DCLogic {
       mapModalOpen: this.state.mapModalOpen,
       closeModal: () => this.setState({ mapModalOpen: false }),
       stopClick: (e) => e.stopPropagation(),
-      mainOrder: this.state.isMobile ? 2 : 1,
-      asideOrder: this.state.isMobile ? 1 : 2,
+      gridCols: this.state.isMobile ? '1fr' : 'minmax(300px,1fr) minmax(300px,1fr)',
+      gridAreas: this.state.isMobile ? '"map" "main" "summary" "sector"' : '"main map" "main summary" "main sector"',
       chipsVisible: !this.state.mapSelectedCode
     };
     if (!this.state.mapLoaded) return { ...base, mapSectChips: [], searchResults: [] };
