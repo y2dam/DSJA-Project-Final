@@ -2922,6 +2922,8 @@ footer strong{color:var(--ink);font-weight:700}
     if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
   });
   function onScroll(){
+    var maxScroll=document.documentElement.scrollHeight-window.innerHeight;
+    if(window.scrollY>=maxScroll-2){ setCurrent(screens[screens.length-1]); return; }
     var y=window.scrollY+Math.min(160, window.innerHeight*0.3);
     var current=0;
     screens.forEach(function(i){
