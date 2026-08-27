@@ -149,10 +149,10 @@ body{margin:0}
         </sc-if>
       </svg>
       <sc-for list="{{ regionLabels }}" as="lb" hint-placeholder-count="17">
-        <span style="position:absolute;left:{{ lb.xPct }}%;top:{{ lb.yPct }}%;transform:translate(-50%,-50%);font-size:16px;font-weight:700;color:#4A3A2E;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff,0 0 3px #fff;pointer-events:none;white-space:nowrap;">{{ lb.labelText }}</span>
+        <span style="position:absolute;left:{{ lb.xPct }}%;top:{{ lb.yPct }}%;transform:translate(-50%,-50%);font-size:clamp(8px,2.3vw,16px);font-weight:700;color:#4A3A2E;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff,0 0 3px #fff;pointer-events:none;white-space:nowrap;">{{ lb.labelText }}</span>
       </sc-for>
       <sc-if value="{{ ulleungdo }}" hint-placeholder-val="{{ false }}">
-        <span style="position:absolute;left:{{ ulleungdo.xPct }}%;top:{{ ulleungdo.yPct }}%;transform:translate(-50%,-50%);font-size:12px;font-weight:700;color:#4A3A2E;text-shadow:0 0 3px #fff,0 0 3px #fff;pointer-events:none;white-space:nowrap;">울릉도*</span>
+        <span style="position:absolute;left:{{ ulleungdo.xPct }}%;top:{{ ulleungdo.yPct }}%;transform:translate(-50%,-50%);font-size:clamp(6px,1.7vw,12px);font-weight:700;color:#4A3A2E;text-shadow:0 0 3px #fff,0 0 3px #fff;pointer-events:none;white-space:nowrap;">울릉도*</span>
       </sc-if>
     </div>
     <div style="display:flex;align-items:center;gap:7px;margin-top:16px;font-size:15px;color:#8A7362;">
