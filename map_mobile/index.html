@@ -51,6 +51,7 @@ body{margin:0}
         </sc-for>
       </div>
     </sc-if>
+    <sc-if value="{{ chipsVisible }}" hint-placeholder-val="{{ true }}">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:12px;">
       <sc-for list="{{ mapSectChips }}" as="chip" hint-placeholder-count="6">
         <button onClick="{{ chip.onClick }}" style="display:flex;align-items:center;gap:5px;font-size:15px;padding:5px 11px;border:1px solid #D9D9D9;background:{{ chip.active }};cursor:pointer;color:#4A3A2E;font-family:inherit;">
@@ -59,6 +60,7 @@ body{margin:0}
         </button>
       </sc-for>
     </div>
+    </sc-if>
   </div>
   </sc-if>
 </header>
@@ -71,7 +73,7 @@ body{margin:0}
 
 <sc-if value="{{ mapLoaded }}" hint-placeholder-val="{{ false }}">
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;margin-top:38px;">
-  <main>
+  <main style="order:{{ mainOrder }};">
     <sc-if value="{{ selectedOrg }}" hint-placeholder-val="{{ false }}">
     <div style="background:#EEF5F8;border:1px solid #D9D9D9;position:relative;">
       <div style="position:relative;padding:22px 60px 18px 24px;border-bottom:1px solid #D9D9D9;">
@@ -135,7 +137,7 @@ body{margin:0}
     </sc-if>
   </main>
 
-  <aside>
+  <aside style="order:{{ asideOrder }};">
     <h3 style="font-family:'A2G',serif;font-weight:500;font-size:18px;margin:0 0 4px;">시도별 부실 확산</h3>
     <p style="margin:0 0 16px;font-size:16px;color:#8A7362;word-break:keep-all;">떼일 위험이 큰 대출이 5%를 넘는 조합의 비중. 지도를 눌러 지역을 선택하세요.</p>
     <div style="position:relative;">
@@ -391,7 +393,7 @@ class Component extends DCLogic {
   }
 
   toggleSido(key) { this.setState({ mapSido: this.state.mapSido === key ? null : key }); }
-  selectOrg(code) { this.setState({ mapSelectedCode: code, mapQuery: '' }); }
+  selectOrg(code) { this.setState({ mapSelectedCode: code, mapQuery: '', mapSect: '', mapSido: null }); }
 
   getFilteredOrgs() {
     if (!this.orgs) return [];
@@ -520,6 +522,15 @@ class Component extends DCLogic {
   }
 
   componentDidMount() {
+    this.onImgError = (e) => {
+      const t = e.target;
+      if (t && t.tagName === 'IMG' && /\{\{|logo-/.test(t.getAttribute('src') || '')) t.style.display = 'none';
+    };
+    document.addEventListener('error', this.onImgError, true);
+    this.mq = window.matchMedia('(max-width:640px)');
+    this.onMqChange = () => this.setState({ isMobile: this.mq.matches });
+    this.mq.addEventListener ? this.mq.addEventListener('change', this.onMqChange) : this.mq.addListener(this.onMqChange);
+    this.setState({ isMobile: this.mq.matches });
     Promise.all([
       import('./map-data.js'),
       import('./map-geo.js'),
@@ -544,7 +555,10 @@ class Component extends DCLogic {
       clearSido: () => this.setState({ mapSido: null }),
       mapModalOpen: this.state.mapModalOpen,
       closeModal: () => this.setState({ mapModalOpen: false }),
-      stopClick: (e) => e.stopPropagation()
+      stopClick: (e) => e.stopPropagation(),
+      mainOrder: this.state.isMobile ? 2 : 1,
+      asideOrder: this.state.isMobile ? 1 : 2,
+      chipsVisible: !this.state.mapSelectedCode
     };
     if (!this.state.mapLoaded) return { ...base, mapSectChips: [], searchResults: [] };
     const D = this.mapMod.D;
