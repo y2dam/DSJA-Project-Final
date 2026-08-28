@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+@font-face{font-family:"A2G";src:url("assets/font-a2g-500.ttf") format("truetype");font-weight:500;font-display:swap}
+@font-face{font-family:"A2G";src:url("assets/font-a2g-600.ttf") format("truetype");font-weight:600;font-display:swap}
+@font-face{font-family:"A2GScroll";src:url("assets/font-a2gscroll-500.ttf") format("truetype");font-weight:500;font-display:swap}
+html,body{margin:0;height:100%;background:#DAEDF6}
+::selection{background:#6B4A3233}
+a{color:#6B4A32;text-decoration:none}
+a:hover{color:#B25444}
+.pres-scroll::-webkit-scrollbar{width:0}
+p,li,h1,h2,h3,span,a,div{word-break:keep-all;overflow-wrap:break-word;}
+.tt-wrap{position:relative}
+.tt-bubble{position:absolute;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:80;white-space:nowrap;}
+.tt-wrap:hover .tt-bubble{opacity:1}
+@keyframes sweepBeam{0%{left:0%;opacity:0}6%{opacity:1}94%{opacity:1}100%{left:100%;opacity:0}}
+@keyframes hintBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}
+@keyframes caretBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
+</style>
+</helmet>
+
+<div ref="{{ scrollRef }}" class="pres-scroll" style="height:100vh;overflow-y:scroll;scroll-snap-type:y proximity;scrollbar-width:none;font-family:'Pretendard',system-ui,sans-serif;color:#4A3A2E;background:radial-gradient(ellipse 70vw 60vh at 82% 8%,#5B9BD9 0%,#8CBBE6 24%,transparent 58%),radial-gradient(ellipse 55vw 46vh at 30% 55%,#E8DAC0 0%,transparent 58%),radial-gradient(ellipse 60vw 60vh at 10% 92%,#9DC3E8 0%,transparent 56%),repeating-linear-gradient(to bottom,transparent 0 31px,#00000005 31px 32px),repeating-linear-gradient(to right,transparent 0 39px,#00000004 39px 40px),#DAEDF6;background-attachment:fixed,fixed,fixed,fixed,fixed,fixed;">
+
+<div style="position:fixed;top:0;left:0;height:3px;width:{{ progressPct }}%;background:#6B4A32;z-index:60;transition:width .35s ease;"></div>
+
+<nav aria-label="목차" style="position:fixed;top:50%;right:clamp(16px,2vw,30px);transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+  <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="9">
+    <a href="#" class="tt-wrap" aria-label="{{ item.name }}" sc-camel-on-click="{{ item.onClick }}" style="display:flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;">
+      <span style="font-family:'Pretendard',sans-serif;font-size:10px;letter-spacing:.02em;color:{{ item.color }};opacity:.75;white-space:nowrap;pointer-events:none;">{{ item.label }}</span>
+      <span style="display:block;width:{{ item.dotW }}px;height:2px;background:{{ item.color }};transition:all .25s ease;"></span>
+      <span class="tt-bubble" style="right:calc(100% + 12px);top:50%;transform:translateY(-50%) translateX(4px);background:#4A3A2Ee6;color:#fff;font-size:12px;padding:5px 10px;border-radius:6px;">{{ item.name }}</span>
+    </a>
+  </sc-for>
+</nav>
+
+<section data-screen-label="01" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,14vh,180px) clamp(40px,7vw,130px) clamp(60px,9vh,110px);display:grid;grid-template-rows:1fr auto;">
+  <div style="align-self:center;max-width:1500px;opacity:{{ rv0o }};transform:translateY({{ rv0y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-family:'Pretendard',sans-serif;font-size:13px;letter-spacing:.18em;color:#8A7362;margin:0 0 20px;">상호금융 재무건전성 탐사보도 · DSJA TeamA+</p>
+    <h1 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(40px,6.6vw,116px);line-height:1.18;margin:0 0 18px;letter-spacing:-.015em;">당신의 통장은<br>안녕하십니까</h1>
+    <p style="margin:0;color:#8A7362;font-size:clamp(16px,1.8vw,28px);">열리지 않는 공시와 상호금융조합 재무제표</p>
+  </div>
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:clamp(24px,4vw,60px);flex-wrap:wrap;border-top:1px solid #4A3A2E33;padding-top:clamp(18px,3vh,30px);">
+    <p style="margin:0;color:#8A7362;font-size:clamp(14px,1.35vw,24px);line-height:1.7;white-space:nowrap;">설문조사 응답자 95%... 금융 관련 용어 어려워<br>농축협·신협·새마을금고·수협·산림조합의 재무건전성 정보를 한데 모아 분석</p>
+    <div style="display:flex;gap:clamp(14px,2vw,28px);align-items:center;opacity:.8;">
+      <img src="assets/logo-nonghyup.png" alt="농협" style="height:clamp(28px,2.6vw,44px);object-fit:contain;">
+      <img src="assets/logo-shinhyup.png" alt="신협" style="height:clamp(28px,2.6vw,44px);object-fit:contain;">
+      <img src="assets/logo-saemaul.png" alt="새마을금고" style="height:clamp(28px,2.6vw,44px);object-fit:contain;">
+      <img src="assets/logo-suhyup.png" alt="수협" style="height:clamp(28px,2.6vw,44px);object-fit:contain;">
+      <img src="assets/logo-sanlim.png" alt="산림조합" style="height:clamp(28px,2.6vw,44px);object-fit:contain;">
+    </div>
+  </div>
+  <p style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-family:'Pretendard',sans-serif;font-size:13px;letter-spacing:.15em;color:#8A7362;margin:0;animation:hintBounce 1.8s ease-in-out infinite;">↓</p>
+</section>
+
+<section data-screen-label="02" style="min-height:100vh;scroll-snap-align:start;position:relative;overflow:hidden;background-image:url(&quot;assets/hero-bg.jpg&quot;);background-size:cover;background-position:center 22%;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.34) 0%,rgba(10,10,10,.42) 42%,rgba(10,10,10,.86) 100%);"></div>
+  <div style="position:relative;padding:0 clamp(40px,7vw,130px) clamp(70px,11vh,130px);max-width:1150px;opacity:{{ rv1o }};transform:translateY({{ rv1y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-family:'A2GScroll',serif;font-weight:500;font-size:clamp(21px,2.3vw,40px);line-height:1.6;color:#fff;margin:0;word-break:keep-all;">부실 대출 규모 {{ stat475 }}억 원이 새어나갔다. 대출 서류를 조작해도 확인 없이 대출금이 지급됐다. 결국 남양주동부새마을금고는 2023년 7월, 화도새마을금고에 흡수합병됐다.</p>
+    <p style="margin:22px 0 0;font-size:clamp(12px,1.1vw,18px);color:#ffffffb0;">2023년 6월, 남양주동부새마을금고의 화도새마을금고 합병 안내문. ⓒ노컷뉴스</p>
+  </div>
+</section>
+
+<section data-screen-label="03" style="min-height:100vh;scroll-snap-align:start;position:relative;overflow:hidden;background-image:url(&quot;assets/hero-bg.jpg&quot;);background-size:cover;background-position:center 22%;display:flex;align-items:center;justify-content:flex-end;">
+  <div style="position:absolute;inset:0;background:rgba(10,10,10,.76);"></div>
+  <div style="position:relative;padding:0 clamp(40px,7vw,130px);max-width:1000px;text-align:right;opacity:{{ rv2o }};transform:translateY({{ rv2y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-family:'A2GScroll',serif;font-weight:500;font-size:clamp(19px,2vw,34px);line-height:1.62;color:#ffffffcc;margin:0 0 clamp(30px,5vh,56px);word-break:keep-all;">합병 결정 사흘 만에 예·적금 {{ stat100 }}억 원이 빠져나갔다. 부동산 대출 부실, 연체율 상승 —<br>뒤늦게 하나씩 드러났다.</p>
+    <p style="font-family:'A2G',serif;font-weight:600;font-size:clamp(26px,3.2vw,58px);line-height:1.4;margin:0;color:#fff;">평소엔, 이 위험을<br>어떻게 알 수 있을까?</p>
+  </div>
+</section>
+
+<section data-screen-label="04" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) clamp(40px,7vw,130px) clamp(70px,10vh,120px);display:flex;flex-direction:column;justify-content:center;gap:clamp(40px,6vh,64px);">
+  <div style="opacity:{{ rv3o }};transform:translateY({{ rv3y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <h2 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(24px,3vw,52px);margin:0;line-height:1.32;">목차</h2>
+  </div>
+  <div style="display:flex;flex-direction:column;max-width:900px;width:100%;opacity:{{ rv3o }};transform:translateY({{ rv3y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <sc-for list="{{ tocItems }}" as="t" hint-placeholder-count="7">
+      <a href="#" sc-camel-on-click="{{ t.onClick }}" style="display:flex;align-items:baseline;gap:clamp(24px,3.2vw,48px);padding:clamp(16px,2.4vh,24px) 2px;border-bottom:1px solid rgba(74,58,46,.16);text-decoration:none;color:inherit;transition:gap .3s ease,color .3s ease,border-color .3s ease;" style-hover="gap:clamp(34px,4.4vw,60px);color:#B25444;border-color:#B25444;">
+        <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:clamp(26px,2.6vw,42px);color:#4A3A2E22;flex:none;width:2.6ch;">{{ t.idx }}</span>
+        <span style="font-family:'A2G',serif;font-weight:600;font-size:clamp(20px,2vw,34px);flex:1;line-height:1.3;">{{ t.name }}</span>
+        <span aria-hidden="true" style="font-family:'Pretendard',sans-serif;font-size:clamp(13px,1.15vw,20px);color:#8A7362;flex:none;">{{ t.no }}</span>
+      </a>
+    </sc-for>
+  </div>
+</section>
+
+<section data-screen-label="05" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) clamp(40px,7vw,130px) clamp(70px,10vh,120px);display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(30px,5vw,90px);align-items:center;">
+  <p style="font-family:'A2G',serif;font-weight:500;font-size:clamp(30px,4vw,74px);line-height:1.32;margin:0;color:#1E3A6E;opacity:{{ rv4o }};transform:translateY({{ rv4y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">숫자는 공개돼 있다.<br>그런데 위험은<br>보이지 않는다.</p>
+  <div style="display:flex;flex-direction:column;gap:clamp(14px,2vh,20px);">
+    <div style="background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);border-radius:14px;padding:clamp(22px,2.6vw,34px);">
+      <div style="display:flex;align-items:center;gap:12px;margin:0 0 14px;">
+        <span style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:#B254441a;flex:none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B25444" stroke-width="2.4"><path d="M12 3l9 16H3z"></path><path d="M12 10v4"></path><circle cx="12" cy="17.3" r=".4" fill="#B25444"></circle></svg>
+        </span>
+        <p style="font-family:'Pretendard',sans-serif;font-size:clamp(12px,1.1vw,17px);letter-spacing:.04em;color:#B25444;font-weight:600;margin:0;">공개 지표의 한계</p>
+      </div>
+      <p style="font-size:clamp(15px,1.45vw,25px);line-height:1.75;margin:0 0 10px;"><b>연체율 · 순자본비율 · 대손충당금 적립률.</b> 모두 공시 대상. 다만 숫자 공개가 곧 위험 파악을 의미하지는 않음.</p>
+      <p style="font-size:clamp(15px,1.45vw,25px);line-height:1.75;margin:0;">상호금융조합, 기관마다 공시 형식과 지표 제각각 — <b>비교 자체가 어려움.</b></p>
+    </div>
+    <div style="background:#1E3A6E;border-radius:14px;padding:clamp(22px,2.6vw,34px);">
+      <div style="display:flex;align-items:center;gap:12px;margin:0 0 14px;">
+        <span style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.16);flex:none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M20 6L9 17l-5-5"></path></svg>
+        </span>
+        <p style="font-family:'Pretendard',sans-serif;font-size:clamp(12px,1.1vw,17px);letter-spacing:.04em;color:#fff;opacity:.8;font-weight:600;margin:0;">이번 조사</p>
+      </div>
+      <p style="font-size:clamp(16px,1.55vw,27px);line-height:1.7;margin:0;font-weight:600;color:#fff;">5개 업권의 재무건전성 정보를 한데 모아 직접 비교했음.</p>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="06" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) clamp(40px,7vw,130px) clamp(70px,10vh,120px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,3vw,60px);align-items:center;">
+  <div style="max-width:720px;opacity:{{ rv5o }};transform:translateY({{ rv5y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-family:'Pretendard',sans-serif;font-size:clamp(64px,8vw,150px);font-weight:600;line-height:.9;margin:0 0 clamp(14px,2.4vh,26px);color:#6B4A32;opacity:.22;">01</p>
+    <h2 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(26px,3.4vw,60px);margin:0 0 clamp(18px,3vh,32px);line-height:1.3;">공시는 했다,<br>그런데 볼 수가 없다</h2>
+    <p style="font-size:clamp(15px,1.45vw,25px);line-height:1.8;margin:0 0 18px;max-width:620px;">대부분 조합, 반기마다 재무제표를 PDF로 공시.</p>
+    <p style="font-size:clamp(15px,1.45vw,25px);line-height:1.8;margin:0;color:#8A7362;max-width:620px;">올려놓은 것과 실제로 열어볼 수 있는 것은 다른 문제.</p>
+  </div>
+  <div style="background:rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.34);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 20px 50px -26px rgba(74,58,46,.4);border-radius:16px;padding:clamp(26px,3vw,46px);width:100%;max-width:1200px;margin-right:clamp(60px,7vw,120px);">
+    <p style="margin:0 0 clamp(20px,3vh,30px);font-size:clamp(13px,1.2vw,22px);color:#8A7362;text-align:center;">같은 이름의 '공시 파일', 결과는 정반대.</p>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(18px,2.4vw,32px);">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;background:#5B7A521a;border-radius:14px;padding:clamp(20px,2.4vw,32px) clamp(16px,2vw,26px);">
+        <svg width="52" height="52" sc-camel-view-box="0 0 24 24" fill="none" stroke="#5B7A52" stroke-width="1.8" style="flex:none;"><path d="M6 2h9l5 5v15H6z"></path><path d="M15 2v5h5"></path><path d="M9 13l2 2 4-4"></path></svg>
+        <p style="margin:0;font-weight:600;font-size:clamp(17px,1.6vw,28px);">재무상태표.pdf</p>
+        <p style="margin:0;font-size:clamp(13px,1.2vw,22px);color:#5B7A52;">열람 가능 (자산 · 부채 · 순자본비율 확인 가능)</p>
+      </div>
+      <div aria-hidden="true" style="font-family:'Pretendard',sans-serif;color:#8A7362;font-size:clamp(12px,1vw,16px);">VS</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;background:#B254441a;border-radius:14px;padding:clamp(20px,2.4vw,32px) clamp(16px,2vw,26px);">
+        <svg width="52" height="52" sc-camel-view-box="0 0 24 24" fill="none" stroke="#B25444" stroke-width="1.8" style="flex:none;"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 118 0v4"></path></svg>
+        <p style="margin:0;font-weight:600;font-size:clamp(17px,1.6vw,28px);">재무상태표.pdf</p>
+        <p style="margin:0;font-size:clamp(13px,1.2vw,22px);color:#B25444;">열람 불가 (Fasoo로 암호화됨)</p>
+      </div>
+    </div>
+    <p style="margin:clamp(20px,3vh,32px) 0 0;font-size:clamp(12px,1.1vw,20px);color:#8A7362;line-height:1.6;text-align:center;">농협 결산 공시(경영실태평가 등급 포함) —<br>예금자가 볼 수 있는 창구는 농협 홈페이지가 사실상 유일.</p>
+  </div>
+</section>
+
+<section data-screen-label="07" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) 0 clamp(60px,9vh,110px);display:flex;flex-direction:column;justify-content:center;gap:clamp(24px,4vh,46px);">
+  <div style="padding:0 clamp(40px,7vw,130px);max-width:1250px;opacity:{{ rv6o }};transform:translateY({{ rv6y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-family:'Pretendard',sans-serif;font-size:clamp(13px,1.15vw,20px);letter-spacing:.18em;color:#6B4A32;margin:0 0 14px;">02 — 파일은 있다, 읽을 수만 없을 뿐</p>
+    <p style="font-size:clamp(19px,2.1vw,38px);line-height:1.55;margin:0;">2018~2026년 지역농협 경영공시 {{ stat13140 }}건 전수 분석 결과, <b style="color:#B25444;">{{ stat3023 }}%에서 신용 재무상태표 확인 불가.</b> 수협도 1,538건 중 15건(0.98%) 열람 불가. 파일 부재가 아님. 파일은 존재. 다만 읽기 불가.</p>
+  </div>
+  <div style="position:relative;width:100%;">
+    <div style="display:grid;grid-template-columns:repeat(15,1fr);gap:6px;width:90%;max-width:1100px;margin:0 auto;">
+      <sc-for list="{{ scanCells }}" as="cell" hint-placeholder-count="75">
+        <div class="tt-wrap" aria-label="{{ cell.label }}" style="aspect-ratio:1;width:100%;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;" style-hover="z-index:2;">
+          <svg viewBox="0 0 24 24" fill="none" style="width:56%;height:56%;stroke:{{ cell.color }};stroke-width:1.6;transition:transform .18s ease;" style-hover="transform:scale(1.22);"><path d="M6 2h9l5 5v15H6z"></path><path d="M15 2v5h5"></path></svg>
+          <span class="tt-bubble" style="bottom:calc(100% + 6px);left:50%;transform:translateX(-50%) translateY(4px);background:#4A3A2Ee6;color:#fff;font-size:11px;padding:4px 8px;border-radius:5px;">{{ cell.label }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="position:absolute;top:0;left:0;width:5px;height:100%;background:linear-gradient(180deg,transparent,#F5FDFF,transparent);box-shadow:0 0 22px 6px #BEE7FFdd,0 0 8px 2px #ffffffee;animation:sweepBeam 12s linear infinite;"></div>
+  </div>
+  <div style="padding:0 clamp(40px,7vw,130px);display:flex;gap:clamp(16px,2.4vw,34px);flex-wrap:wrap;">
+    <span style="display:flex;align-items:center;gap:9px;font-size:clamp(13px,1.15vw,21px);color:#4A3A2E;"><span style="width:13px;height:13px;border-radius:3px;background:#B25444;"></span>신용 재무상태표 확인 불가 (30.23%)</span>
+    <span style="display:flex;align-items:center;gap:9px;font-size:clamp(13px,1.15vw,21px);color:#8A7362;"><span style="width:13px;height:13px;border-radius:3px;background:#D8CFC5;"></span>확인 가능</span>
+    <span style="font-size:clamp(13px,1.15vw,21px);color:#8A7362;margin-left:auto;">겉보기엔 똑같은 파일이나, 열어보면 3건 중 1건 가까이 열람 불가</span>
+  </div>
+</section>
+
+<section data-screen-label="08" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) clamp(40px,7vw,130px) clamp(70px,10vh,120px);display:flex;flex-direction:column;justify-content:center;gap:clamp(30px,5vh,50px);position:relative;overflow:hidden;">
+  <div aria-hidden="true" style="position:absolute;top:8%;right:8%;width:32vw;height:32vw;border-radius:50%;background:#4A3A2E;opacity:.08;filter:blur(100px);pointer-events:none;"></div>
+  <div aria-hidden="true" style="position:absolute;bottom:0%;left:14%;width:30vw;height:30vw;border-radius:50%;background:#B25444;opacity:.1;filter:blur(100px);pointer-events:none;"></div>
+  <p style="position:relative;font-family:'Pretendard',sans-serif;font-size:clamp(13px,1.15vw,20px);letter-spacing:.18em;color:#6B4A32;margin:0;opacity:{{ rv7o }};transform:translateY({{ rv7y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">02 — 숫자로 보는 판정 결과</p>
+  <div style="position:relative;display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(50px,7vw,120px);align-items:stretch;width:100%;max-width:1500px;opacity:{{ rv7o }};transform:translateY({{ rv7y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <div style="padding-right:clamp(30px,4vw,70px);border-right:1px solid #4A3A2E22;text-align:center;display:flex;flex-direction:column;align-items:center;">
+      <div style="display:flex;align-items:center;gap:clamp(20px,2.6vw,36px);">
+        <svg width="120" height="120" viewBox="0 0 36 36" style="flex:none;">
+          <circle cx="18" cy="18" r="15.5" fill="none" stroke="#4A3A2E1c" stroke-width="4"></circle>
+          <circle cx="18" cy="18" r="15.5" fill="none" stroke="#4A3A2E" stroke-width="4" stroke-linecap="round" pathLength="100" stroke-dasharray="71 100" transform="rotate(-90 18 18)"></circle>
+        </svg>
+        <p style="font-family:'Pretendard',sans-serif;font-size:clamp(60px,8.5vw,150px);font-weight:600;line-height:1;margin:0;color:#4A3A2E;">{{ stat71 }}<span style="font-size:.45em;">%</span></p>
+      </div>
+      <p style="font-size:clamp(16px,1.5vw,27px);color:#8A7362;margin:clamp(20px,3vh,32px) 0 0;line-height:1.65;max-width:34ch;">못 읽는 공시 중 스캔본 비율. 사람이 직접 입력하지 않는 한 추이 분석 자체가 불가능.</p>
+    </div>
+    <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
+      <div style="display:flex;align-items:center;gap:clamp(20px,2.6vw,36px);">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#B25444" stroke-width="1.6" style="flex:none;"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 118 0v4"></path></svg>
+        <p style="font-family:'Pretendard',sans-serif;font-size:clamp(60px,8.5vw,150px);font-weight:600;line-height:1;margin:0;color:#B25444;">{{ stat139 }}<span style="font-size:.45em;">건</span></p>
+      </div>
+      <p style="font-size:clamp(16px,1.5vw,27px);color:#8A7362;margin:clamp(20px,3vh,32px) 0 0;line-height:1.65;max-width:34ch;">농협 PDF 중 Fasoo DRM 암호화 파일. 전용 클라이언트와 내부 권한이 없으면 열람 자체가 불가능.</p>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="09" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) clamp(40px,7vw,130px) clamp(70px,10vh,120px);display:flex;flex-direction:column;justify-content:center;gap:clamp(26px,4vh,44px);">
+  <div style="max-width:820px;opacity:{{ rv8o }};transform:translateY({{ rv8y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-family:'Pretendard',sans-serif;font-size:clamp(13px,1.15vw,20px);letter-spacing:.18em;color:#6B4A32;margin:0 0 14px;">02 — 판정 기준</p>
+    <h2 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(24px,3vw,52px);margin:0 0 18px;line-height:1.32;">어떻게 못 읽는다고<br>판단했나</h2>
+    <ul style="margin:14px 0 0;padding-left:1.15em;display:flex;flex-direction:column;gap:9px;">
+      <li style="font-size:clamp(14px,1.3vw,22px);line-height:1.7;">농협 사이트의 '농·축협 경영공시'에서 2018~2026년 전국 농·축협 공시자료를 전수 수집</li>
+      <li style="font-size:clamp(14px,1.3vw,22px);line-height:1.7;">연도·페이지별로 목록을 자동 조회하고, <b>첨부 ZIP 파일을 다운로드해 PDF만 추출·저장</b></li>
+      <li style="font-size:clamp(14px,1.3vw,22px);line-height:1.7;">156개 지역본부의 정기·상반기 결산 공시 13,140건 확보</li>
+    </ul>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(20px,2.6vw,40px);opacity:{{ rv8o }};transform:translateY({{ rv8y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <div style="background:rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.34);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 20px 50px -26px rgba(74,58,46,.4);border-radius:16px;padding:clamp(24px,2.8vw,40px);">
+      <div style="display:flex;align-items:center;gap:12px;margin:0 0 14px;">
+        <span style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:#4A3A2E;color:#fff;font-family:'Pretendard',sans-serif;font-size:14px;flex:none;">1</span>
+        <p style="font-family:'Pretendard',sans-serif;font-size:clamp(13px,1.15vw,20px);letter-spacing:.02em;color:#6B4A32;margin:0;">열기 전에 걸러냄</p>
+      </div>
+      <p style="margin:0 0 16px;font-size:clamp(14px,1.3vw,22px);line-height:1.7;">파일을 열기 전 헤더 바이트를 확인해 <b>DRM·파일 손상·파일 부재</b> 등 사람이 열어도 확인하기 어려운 파일을 1차 판별</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,.3);border-radius:8px;padding:9px 14px;">
+          <span style="font-size:clamp(12px,1.1vw,18px);color:#4A3A2E;">"FasooSecureContainer", "DRMONE" 서명 발견</span>
+          <span style="font-family:'Pretendard',sans-serif;font-size:11px;letter-spacing:.04em;background:#B254441a;color:#B25444;border-radius:20px;padding:3px 10px;flex:none;">DRM</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,.3);border-radius:8px;padding:9px 14px;">
+          <span style="font-size:clamp(12px,1.1vw,18px);color:#4A3A2E;">%PDF로 시작 안 하는데 빈 파일도 아님</span>
+          <span style="font-family:'Pretendard',sans-serif;font-size:11px;letter-spacing:.04em;background:#B254441a;color:#B25444;border-radius:20px;padding:3px 10px;flex:none;">손상</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,.3);border-radius:8px;padding:9px 14px;">
+          <span style="font-size:clamp(12px,1.1vw,18px);color:#4A3A2E;">후보 파일 자체가 없음</span>
+          <span style="font-family:'Pretendard',sans-serif;font-size:11px;letter-spacing:.04em;background:#B254441a;color:#B25444;border-radius:20px;padding:3px 10px;flex:none;">없음</span>
+        </div>
+      </div>
+      <p style="margin:16px 0 0;font-size:clamp(11px,1vw,17px);color:#8A7362;line-height:1.6;">※ 파일 첫 300바이트만 읽어서 판정. DRM 암호화 파일은 직접 사이트에서 파일을 눌러 확인</p>
+    </div>
+    <div style="background:rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.34);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 20px 50px -26px rgba(74,58,46,.4);border-radius:16px;padding:clamp(24px,2.8vw,40px);">
+      <div style="display:flex;align-items:center;gap:12px;margin:0 0 14px;">
+        <span style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:#4A3A2E;color:#fff;font-family:'Pretendard',sans-serif;font-size:14px;flex:none;">2</span>
+        <p style="font-family:'Pretendard',sans-serif;font-size:clamp(13px,1.15vw,20px);letter-spacing:.02em;color:#6B4A32;margin:0;">실제로 열어서 확인</p>
+      </div>
+      <p style="margin:0 0 18px;font-size:clamp(14px,1.3vw,22px);line-height:1.7;">정상적으로 열리는 파일을 대상으로 <b>텍스트 추출량을 측정</b>,<br>100자 미만이면 스캔 이미지 파일로 판정</p>
+      <div style="display:flex;align-items:center;gap:clamp(16px,2vw,26px);background:rgba(255,255,255,.3);border-radius:10px;padding:clamp(16px,1.8vw,24px);">
+        <div style="text-align:center;flex:1;">
+          <p style="font-family:'Pretendard',sans-serif;font-size:clamp(22px,2.4vw,36px);font-weight:600;margin:0;color:#4A3A2E;">수천 자</p>
+          <p style="font-size:clamp(11px,1vw,16px);color:#8A7362;margin:6px 0 0;">정상 문서</p>
+        </div>
+        <div aria-hidden="true" style="width:1px;height:40px;background:#4A3A2E33;flex:none;"></div>
+        <div style="text-align:center;flex:1;">
+          <p style="font-family:'Pretendard',sans-serif;font-size:clamp(22px,2.4vw,36px);font-weight:600;margin:0;color:#B25444;">0자</p>
+          <p style="font-size:clamp(11px,1vw,16px);color:#8A7362;margin:6px 0 0;"><br>스캔본 (그림 한 장)</p>
+        </div>
+      </div>
+      <p style="margin:16px 0 0;font-size:clamp(11px,1vw,17px);color:#8A7362;line-height:1.6;">※ pypdf로 텍스트 추출 시도. 숫자와 재무정보는 눈으로 확인 가능하지만 기계는 텍스트로 인식하지 못하는 경우로 확인</p>
+    </div>
+  </div>
+
+</section>
+
+<section data-screen-label="10" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(60px,8vh,90px) clamp(40px,7vw,130px) clamp(40px,6vh,70px);display:flex;flex-direction:column;justify-content:center;gap:clamp(16px,2.4vh,26px);">
+  <div style="max-width:900px;opacity:{{ rv9o }};transform:translateY({{ rv9y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-family:'Pretendard',sans-serif;font-size:clamp(13px,1.15vw,20px);letter-spacing:.18em;color:#6B4A32;margin:0 0 6px;">02 — 수협 91개 조합, 제각각의 홈페이지</p>
+    <h2 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(24px,3vw,52px);margin:0;line-height:1.32;">수협은,<br>조합마다 사이트가 달랐다</h2>
+  </div>
+  <div style="display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,3.2vw,50px);align-items:stretch;opacity:{{ rv9o }};transform:translateY({{ rv9y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <div>
+      <p style="font-family:'Pretendard',sans-serif;font-size:clamp(12px,1.05vw,19px);letter-spacing:.1em;color:#8A7362;margin:0 0 8px;">자동 판별 로직</p>
+      <p style="font-size:clamp(13px,1.15vw,18px);line-height:1.55;margin:0 0 10px;">조합 홈페이지가 쓰는 게시판 CMS를 URL 패턴으로 자동 판별해 정기 경영공시 본 파일만 골라 저장. 요약공시·감사보고서·수시공시 등은 제외.</p>
+      <div style="background:rgba(255,255,255,.22);border:1px solid rgba(74,58,46,.14);border-radius:10px;overflow:hidden;margin:0 0 10px;">
+        <div style="display:grid;grid-template-columns:.6fr 1.5fr 1.2fr;background:rgba(74,58,46,.08);padding:6px clamp(12px,1.4vw,18px);">
+          <span style="font-family:'Pretendard',sans-serif;font-size:clamp(11px,1vw,16px);color:#6B4A32;">유형</span>
+          <span style="font-family:'Pretendard',sans-serif;font-size:clamp(11px,1vw,16px);color:#6B4A32;">URL 패턴</span>
+          <span style="font-family:'Pretendard',sans-serif;font-size:clamp(11px,1vw,16px);color:#6B4A32;">다운로드</span>
+        </div>
+        <div style="display:grid;grid-template-columns:.6fr 1.5fr 1.2fr;padding:7px clamp(12px,1.4vw,18px);border-top:1px solid rgba(74,58,46,.12);">
+          <span style="font-size:clamp(12px,1.05vw,16px);font-weight:600;">A</span>
+          <span style="font-size:clamp(12px,1.05vw,16px);">수협 표준 템플릿</span>
+          <span style="font-family:'Pretendard',sans-serif;font-size:clamp(10px,.9vw,13px);color:#8A7362;">POST fileDownload.do</span>
+        </div>
+        <div style="display:grid;grid-template-columns:.6fr 1.5fr 1.2fr;padding:7px clamp(12px,1.4vw,18px);border-top:1px solid rgba(74,58,46,.12);">
+          <span style="font-size:clamp(12px,1.05vw,16px);font-weight:600;">B</span>
+          <span style="font-size:clamp(12px,1.05vw,16px);">eGovFrame bdDefault</span>
+          <span style="font-family:'Pretendard',sans-serif;font-size:clamp(10px,.9vw,13px);color:#8A7362;">GET FileDown.do</span>
+        </div>
+        <div style="display:grid;grid-template-columns:.6fr 1.5fr 1.2fr;padding:7px clamp(12px,1.4vw,18px);border-top:1px solid rgba(74,58,46,.12);">
+          <span style="font-size:clamp(12px,1.05vw,16px);font-weight:600;">C</span>
+          <span style="font-size:clamp(12px,1.05vw,16px);">그누보드</span>
+          <span style="font-family:'Pretendard',sans-serif;font-size:clamp(10px,.9vw,13px);color:#8A7362;">GET download.php</span>
+        </div>
+      </div>
+      <p style="font-size:clamp(11px,1vw,15px);line-height:1.5;color:#8A7362;margin:0 0 12px;">세 유형에 맞지 않는 조합(부산시수협·인천수협 등)은 사람이 직접 확인. 건너뛰지 않음.</p>
+      <div style="background:rgba(74,58,46,.06);border-radius:10px;padding:clamp(12px,1.5vw,18px);">
+        <p style="font-family:'Pretendard',sans-serif;font-size:clamp(11px,1vw,16px);letter-spacing:.08em;color:#6B4A32;margin:0 0 6px;">DRM DETECTOR</p>
+        <p style="font-size:clamp(11px,1vw,15px);line-height:1.5;margin:0 0 10px;">파일 첫 80바이트만 읽어 시그니처로 DRM 여부를 판정, 파일을 통째로 열 필요가 없어 전체 스캔이 빠르다.</p>
+        <div style="display:grid;grid-template-columns:1.3fr 1fr;border-radius:10px;overflow:hidden;background:rgba(255,255,255,.35);">
+          <div style="padding:5px clamp(10px,1.2vw,14px);background:rgba(74,58,46,.08);font-family:'Pretendard',sans-serif;font-size:clamp(9px,.85vw,12px);color:#6B4A32;">시그니처</div>
+          <div style="padding:5px clamp(10px,1.2vw,14px);background:rgba(74,58,46,.08);font-family:'Pretendard',sans-serif;font-size:clamp(9px,.85vw,12px);color:#6B4A32;">벤더</div>
+          <div style="padding:6px clamp(10px,1.2vw,14px);border-top:1px solid rgba(74,58,46,.12);font-size:clamp(11px,1vw,14px);">FasooSecureContainer</div>
+          <div style="padding:6px clamp(10px,1.2vw,14px);border-top:1px solid rgba(74,58,46,.12);font-size:clamp(11px,1vw,14px);">Fasoo</div>
+          <div style="padding:6px clamp(10px,1.2vw,14px);border-top:1px solid rgba(74,58,46,.12);font-size:clamp(11px,1vw,14px);">DRMONE / DRM ONE</div>
+          <div style="padding:6px clamp(10px,1.2vw,14px);border-top:1px solid rgba(74,58,46,.12);font-size:clamp(11px,1vw,14px);">DRMONE</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:clamp(16px,2.4vh,24px);padding-top:clamp(50px,6.5vh,72px);">
+      <div style="background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:clamp(18px,2vw,28px);">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin:0 0 12px;">
+          <p style="font-family:'Pretendard',sans-serif;font-size:clamp(22px,2.8vw,42px);font-weight:600;line-height:1;margin:0;color:#4A3A2E;">{{ stat86 }}<span style="font-size:.45em;color:#8A7362;">/91곳</span></p>
+          <p style="font-size:clamp(11px,1vw,15px);color:#8A7362;margin:0;">완료 (95%)</p>
+        </div>
+        <div style="position:relative;height:10px;border-radius:6px;background:#4A3A2E1c;overflow:hidden;">
+          <div style="position:absolute;inset:0 auto 0 0;width:{{ shPct86 }}%;background:#4A3A2E;border-radius:6px;"></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,20px);">
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:clamp(18px,2.2vw,28px) clamp(12px,1.6vw,20px);">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#4A3A2E" stroke-width="1.6"><rect x="4" y="4" width="12" height="16" rx="1.6"></rect><rect x="8" y="7" width="12" height="16" rx="1.6" fill="#F7F3EC" stroke="#4A3A2E"></rect><line x1="11" y1="11" x2="17" y2="11"></line><line x1="11" y1="14" x2="17" y2="14"></line><line x1="11" y1="17" x2="15" y2="17"></line></svg>
+          <p style="font-family:'Pretendard',sans-serif;font-size:clamp(20px,2.4vw,36px);font-weight:600;line-height:1;margin:0;color:#4A3A2E;">{{ stat1538 }}<span style="font-size:.5em;">건</span></p>
+          <p style="font-size:clamp(11px,1vw,15px);color:#8A7362;margin:0;">확보<br>파일</p>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:clamp(18px,2.2vw,28px) clamp(12px,1.6vw,20px);">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#B25444" stroke-width="1.7"><rect x="4.5" y="10.5" width="15" height="10" rx="2.4"></rect><path d="M7.5 10.5V7.2a4.5 4.5 0 0 1 9 0v3.3"></path><circle cx="12" cy="15.4" r="1.3" fill="#B25444" stroke="none"></circle></svg>
+          <p style="font-family:'Pretendard',sans-serif;font-size:clamp(20px,2.4vw,36px);font-weight:600;line-height:1;margin:0;color:#B25444;">{{ statSh15 }}<span style="font-size:.5em;">건</span></p>
+          <p style="font-size:clamp(11px,1vw,15px);color:#8A7362;margin:0;">DRM 판정</p>
+        </div>
+      </div>
+      <p style="font-size:clamp(12px,1.1vw,19px);color:#8A7362;margin:0;text-align:center;">첫 80바이트로 판정. 벤더 2종<br>Fasoo(농협과 동일) + DRMONE(수협에서 새로 발견)</p>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="11" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) clamp(40px,7vw,130px) clamp(70px,10vh,120px) 0;display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(26px,4vw,70px);align-items:center;">
+  <div>
+    <p style="font-size:clamp(17px,1.75vw,32px);line-height:1.6;margin:0 0 clamp(22px,3.6vh,40px);padding:clamp(22px,2.6vw,40px) clamp(26px,3vw,48px) clamp(22px,2.6vw,40px) clamp(40px,7vw,130px);background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);border-left:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 18px 44px -26px rgba(74,58,46,.36);border-radius:0 16px 16px 0;">DRM 상태로 공시한 지역농협에 취재팀이 직접 전화해 해명 요구. 익명을 요청한 담당자 10명 전원, 열람 불가 상태였는지 몰랐다고 답변, 담당자 실수로 해명.</p>
+    <div style="padding-left:clamp(40px,7vw,130px);">
+      <p style="font-family:'Pretendard',sans-serif;font-size:clamp(12px,1.1vw,19px);letter-spacing:.16em;color:#8A7362;margin:0 0 12px;">EXTREME CASE · A농협의 답변</p>
+      <p style="font-size:clamp(15px,1.4vw,25px);line-height:1.75;margin:0 0 18px;max-width:60ch;">수정 계획을 묻자, 지금 수정하면 업로드일이 바뀐다는 답변.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <span style="font-size:clamp(12px,1.1vw,20px);padding:7px 13px;border-radius:7px;background:#B2544414;border:1px solid #B2544444;color:#B25444;transition:background .18s ease,border-color .18s ease;" style-hover="background:#B2544428;border-color:#B25444;">멍게수하식수협 · DRM 2개년</span>
+        <span style="font-size:clamp(12px,1.1vw,20px);padding:7px 13px;border-radius:7px;background:#B2544414;border:1px solid #B2544444;color:#B25444;transition:background .18s ease,border-color .18s ease;" style-hover="background:#B2544428;border-color:#B25444;">수협 13개 조합 DRM 확인</span>
+        <span style="font-size:clamp(12px,1.1vw,20px);padding:7px 13px;border-radius:7px;background:#B2544414;border:1px solid #B2544444;color:#B25444;transition:background .18s ease,border-color .18s ease;" style-hover="background:#B2544428;border-color:#B25444;">안면도수협 3개년 미게시</span>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:clamp(20px,3.4vh,36px);opacity:{{ rv10o }};transform:translateY({{ rv10y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-size:clamp(15px,1.4vw,25px);line-height:1.8;margin:0;color:#8A7362;max-width:52ch;">지금까지의 공시불이행은 '파일 미게시'. 이번엔 다름 — 게시 기록은 있으나 실질적 접근은 불가능. 형식적 이행과 실질적 공개, 그 사이의 간극.</p>
+    <p style="font-family:'A2G',serif;font-weight:600;font-size:clamp(24px,2.8vw,48px);line-height:1.4;margin:0;color:#1E3A6E;">내려받아도 열리지 않는 재무제표가,<br>8년째 '공시'되고 있다.</p>
+  </div>
+</section>
+
+<section data-screen-label="12" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) clamp(40px,7vw,130px) clamp(70px,10vh,120px);display:flex;flex-direction:column;justify-content:center;gap:clamp(26px,4.4vh,50px);">
+  <div style="max-width:1000px;opacity:{{ rv11o }};transform:translateY({{ rv11y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-family:'Pretendard',sans-serif;font-size:clamp(13px,1.15vw,20px);letter-spacing:.18em;color:#6B4A32;margin:0 0 14px;">03 — 숫자보다 먼저, 용어부터 막힌다</p>
+    <h2 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(24px,3vw,52px);margin:0 0 18px;line-height:1.32;">재무제표,<br>일반인에게 가혹한 숫자 나열</h2>
+    <p style="font-size:clamp(18px,1.75vw,30px);line-height:1.8;margin:0;max-width:62ch;">대부분 한자어 전문용어. 한 글자씩 뜻을 알아도 조합되면 전혀 다른 의미.<br>'여신' = 대출, 그럼 '고정이하여신'은?</p>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:clamp(12px,1.6vw,20px);">
+    <sc-for list="{{ termCards }}" as="t" hint-placeholder-count="7">
+      <span class="tt-wrap" style="display:inline-block;">
+        <span style="display:block;font-family:'A2G',serif;font-weight:600;font-size:{{ t.size }};color:{{ t.color }};cursor:help;background:rgba(255,255,255,.22);backdrop-filter:blur(6px);border:1px solid rgba(74,58,46,.18);border-radius:12px;padding:clamp(12px,1.4vw,20px) clamp(18px,2vw,28px);transition:background .2s ease,border-color .2s ease,transform .2s ease;" style-hover="background:rgba(255,255,255,.4);border-color:#6B4A32;transform:translateY(-3px);">{{ t.term }}</span>
+        <span class="tt-bubble" style="bottom:calc(100% + 10px);left:0;transform:translateY(4px);background:#4A3A2Ee6;color:#fff;font-size:14px;line-height:1.5;padding:8px 12px;border-radius:8px;max-width:280px;white-space:normal;">{{ t.plain }}</span>
+      </span>
+    </sc-for>
+  </div>
+  <p style="font-size:clamp(11px,1vw,17px);color:#8A7362;margin:0;">마우스를 올리면 쉬운 뜻 표시.</p>
+  <p style="font-size:clamp(13px,1.25vw,22px);color:#8A7362;margin:0;max-width:70ch;">금감원 금융용어사전 존재. 다만 공시를 보는 순간 바로 찾아볼 수 있는 구조는 아님</p>
+</section>
+
+<section data-screen-label="13" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) clamp(40px,7vw,130px) clamp(70px,10vh,120px);display:flex;flex-direction:column;justify-content:center;gap:clamp(26px,4vh,44px);">
+  <div style="max-width:820px;opacity:{{ rv12o }};transform:translateY({{ rv12y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-family:'Pretendard',sans-serif;font-size:clamp(13px,1.15vw,20px);letter-spacing:.18em;color:#6B4A32;margin:0 0 14px;">03 — 쉬운 금융 용어 사전</p>
+    <h2 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(24px,3vw,52px);margin:0 0 14px;line-height:1.32;">그래서, 사전을 만들었다</h2>
+    <p style="font-size:clamp(15px,1.45vw,25px);line-height:1.8;margin:0;color:#8A7362;max-width:62ch;">공시에 쓰이는 한자어 전문용어 617개를 쉬운 말로 옮김.</p>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:center;gap:clamp(48px,6vw,90px);opacity:{{ rv12o }};transform:translateY({{ rv12y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;flex:none;">
+      <img src="assets/qr-word.png" alt="금융용어사전 QR 코드" style="width:clamp(170px,16vw,210px);height:auto;border-radius:8px;">
+      <div style="text-align:center;">
+        <p style="margin:0 0 4px;font-size:clamp(13px,1.2vw,20px);font-weight:600;color:#4A3A2E;">직접 확인해보세요</p>
+        <p style="margin:0;font-size:clamp(12px,1.1vw,18px);color:#8A7362;">용어 <b style="font-family:'Pretendard',sans-serif;color:#4A3A2E;">617</b>개 수록</p>
+      </div>
+    </div>
+    <iframe src="site-word/index.html" title="쉬운 금융 용어 사전 데모" style="width:min(100%,900px);height:clamp(520px,72vh,780px);border:1px solid rgba(74,58,46,.25);border-radius:12px;background:#fff;"></iframe>
+  </div>
+</section>
+
+<section data-screen-label="14" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) clamp(40px,7vw,130px) clamp(50px,8vh,90px);display:flex;flex-direction:column;justify-content:center;gap:clamp(26px,4.4vh,48px);">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:clamp(24px,4vw,70px);flex-wrap:wrap;opacity:{{ rv13o }};transform:translateY({{ rv13y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <div style="max-width:640px;">
+      <h2 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(22px,2.7vw,46px);margin:0 0 14px;line-height:1.35;">단어가 낯설수록,<br>숫자도 함께 가려진다</h2>
+      <p style="font-size:clamp(13px,1.25vw,22px);color:#8A7362;margin:0;">금융 용어 설문조사 문항별 정답률 · 100명 중 맞힌 사람 수</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:560px;">
+      <p style="margin:0;font-size:clamp(14px,1.35vw,24px);line-height:1.7;">82명 설문, 평균 100점 만점에 <b style="color:#4988C4;">46.6점</b>. 80점 이상 8.5%, 10~30점대도 22.0%.</p>
+      <p style="margin:0;font-size:clamp(14px,1.35vw,24px);line-height:1.7;color:#8A7362;">응답자 <b style="color:#B25444;">95% 이상</b>, "쉬운 말로 바뀌면 좋겠다" 응답.</p>
+    </div>
+  </div>
+  <div style="display:flex;gap:clamp(14px,2.4vw,40px);align-items:flex-end;">
+    <sc-for list="{{ quizItems }}" as="q" hint-placeholder-count="5">
+      <div style="flex:1;max-width:300px;">
+        <p style="margin:0 0 4px;font-size:clamp(20px,2.1vw,36px);font-weight:800;color:{{ q.color }};font-family:'Pretendard',sans-serif;">{{ q.rateText }}</p>
+        <p style="margin:0 0 12px;font-size:clamp(14px,1.3vw,23px);font-weight:500;color:#4A3A2E;">{{ q.label }}</p>
+        <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:3px;width:100%;">
+          <sc-for list="{{ q.cells }}" as="c" hint-placeholder-count="100">
+            <div style="aspect-ratio:1;border-radius:2px;background:{{ c.bg }};transition:background .35s ease {{ c.delay }}ms;"></div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<section data-screen-label="15" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) 0 clamp(70px,10vh,120px);display:flex;flex-direction:column;justify-content:center;gap:clamp(26px,4.4vh,50px);">
+  <div style="padding:0 clamp(40px,7vw,130px);max-width:1150px;opacity:{{ rv13o }};transform:translateY({{ rv13y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-family:'Pretendard',sans-serif;font-size:clamp(13px,1.15vw,20px);letter-spacing:.18em;color:#6B4A32;margin:0 0 14px;">04 — 등급은 있다, 기준은 없다</p>
+    <h2 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(24px,3vw,52px);margin:0 0 18px;line-height:1.32;">등급은 있다,<br>기준은 없다</h2>
+    <p style="font-size:clamp(15px,1.45vw,25px);line-height:1.8;margin:0;max-width:62ch;">금융당국, 경영<br>상태를 1~5등급으로 종합 평가.</p>
+  </div>
+  <div style="display:flex;width:108%;margin-left:-4%;border-top:1px solid #4A3A2E22;border-bottom:1px solid #4A3A2E22;">
+    <div style="flex:1;text-align:center;padding:clamp(18px,3vh,34px) 6px;border-right:1px solid #4A3A2E14;"><p style="margin:0;font-size:clamp(12px,1.1vw,20px);font-weight:600;color:#5B9BD9;">1등급</p><p style="margin:6px 0 0;font-size:clamp(20px,2.4vw,42px);font-weight:800;color:#5B9BD9;">우수</p></div>
+    <div style="flex:1;text-align:center;padding:clamp(18px,3vh,34px) 6px;border-right:1px solid #4A3A2E14;"><p style="margin:0;font-size:clamp(12px,1.1vw,20px);font-weight:600;color:#7BA689;">2등급</p><p style="margin:6px 0 0;font-size:clamp(20px,2.4vw,42px);font-weight:800;color:#7BA689;">양호</p></div>
+    <div style="flex:1;text-align:center;padding:clamp(18px,3vh,34px) 6px;border-right:1px solid #4A3A2E14;"><p style="margin:0;font-size:clamp(12px,1.1vw,20px);font-weight:600;color:#C9A227;">3등급</p><p style="margin:6px 0 0;font-size:clamp(20px,2.4vw,42px);font-weight:800;color:#C9A227;">보통</p></div>
+    <div style="flex:1;text-align:center;padding:clamp(18px,3vh,34px) 6px;border-right:1px solid #4A3A2E14;"><p style="margin:0;font-size:clamp(12px,1.1vw,20px);font-weight:600;color:#C97848;">4등급</p><p style="margin:6px 0 0;font-size:clamp(20px,2.4vw,42px);font-weight:800;color:#C97848;">취약</p></div>
+    <div style="flex:1;text-align:center;padding:clamp(18px,3vh,34px) 6px;"><p style="margin:0;font-size:clamp(12px,1.1vw,20px);font-weight:600;color:#B25444;">5등급</p><p style="margin:6px 0 0;font-size:clamp(20px,2.4vw,42px);font-weight:800;color:#B25444;">위험</p></div>
+  </div>
+  <p style="padding:0 clamp(40px,7vw,130px);font-family:'A2G',serif;font-weight:600;font-size:clamp(19px,2.1vw,36px);line-height:1.6;margin:0;color:#1E3A6E;max-width:1500px;">그런데 등급 산정 기준은 「상호금융업감독업무시행세칙」에 따라 비공개. 새마을금고만 등급 구간표 공개, 나머지는 비공개. 모든 기관에 동일 기준 적용도 불가능 — 조합원 성격과 수익성 수준 차이로 오분류 위험 증가.</p>
+</section>
+
+<section data-screen-label="16" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(80px,12vh,140px) 0 clamp(60px,9vh,110px) clamp(40px,7vw,130px);display:flex;flex-direction:column;justify-content:center;gap:clamp(20px,3.4vh,36px);position:relative;overflow:hidden;">
+  <div aria-hidden="true" style="position:absolute;top:4%;left:6%;width:36vw;height:36vw;border-radius:50%;background:#B25444;opacity:.16;filter:blur(90px);pointer-events:none;"></div>
+  <div aria-hidden="true" style="position:absolute;bottom:-10%;right:2%;width:38vw;height:38vw;border-radius:50%;background:#5B7A52;opacity:.14;filter:blur(95px);pointer-events:none;"></div>
+  <div style="position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;padding-right:clamp(40px,7vw,130px);opacity:{{ rv15o }};transform:translateY({{ rv15y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <div style="max-width:820px;">
+      <h2 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(21px,2.5vw,44px);margin:0 0 10px;line-height:1.35;">그래서, 지표를 그대로 비교했다</h2>
+      <p style="font-size:clamp(13px,1.2vw,22px);color:#8A7362;margin:0;">FISIS 수집 농협·신협·수협·산림조합 2,199개 조합 · 2016~2025 반기별<br>예시 조합: 화도새마을금고(경기·새마을금고)</p>
+    </div>
+    <div style="display:flex;gap:9px;flex:none;">
+      <button sc-camel-on-click="{{ setY2016 }}" style="font-size:clamp(14px,1.25vw,22px);padding:11px 26px;border-radius:30px;border:0;cursor:pointer;font-family:'Pretendard',sans-serif;background:{{ y2016Bg }};color:{{ y2016Color }};transition:background .2s,color .2s;">2016</button>
+      <button sc-camel-on-click="{{ setY2025 }}" style="font-size:clamp(14px,1.25vw,22px);padding:11px 26px;border-radius:30px;border:0;cursor:pointer;font-family:'Pretendard',sans-serif;background:{{ y2025Bg }};color:{{ y2025Color }};transition:background .2s,color .2s;">2025</button>
+    </div>
+  </div>
+  <div style="position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.6vw,26px);width:100%;max-width:1400px;margin:0 auto;transform:translateX(clamp(-55px,-3.5vw,-35px));">
+    <sc-for list="{{ gauges }}" as="g" hint-placeholder-count="4">
+      <div style="background:rgba(255,255,255,.08);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.35);box-shadow:0 8px 24px -10px rgba(74,58,46,.16),inset 0 1px 0 rgba(255,255,255,.35);border-radius:14px;padding:clamp(16px,2vw,30px) clamp(14px,1.6vw,24px);display:flex;flex-direction:column;align-items:center;text-align:center;">
+        <p style="font-weight:600;font-size:clamp(16px,1.55vw,27px);margin:0 0 8px;">{{ g.title }}</p>
+        <p style="font-size:clamp(12px,1.15vw,21px);color:#8A7362;margin:0 0 12px;line-height:1.5;min-height:3em;">{{ g.desc }}</p>
+        <svg sc-camel-view-box="0 0 200 110" style="width:100%;max-width:230px;height:auto;">
+          <path d="M30,100 A70,70 0 0,1 64.3,39.8" fill="none" stroke="#B25444" stroke-width="16"></path>
+          <path d="M64.3,39.8 A70,70 0 0,1 133.7,38.7" fill="none" stroke="#C9A227" stroke-width="16"></path>
+          <path d="M133.7,38.7 A70,70 0 0,1 170,100" fill="none" stroke="#5B7A52" stroke-width="16"></path>
+          <line x1="100" y1="100" x2="{{ g.nx }}" y2="{{ g.ny }}" stroke="#4A3A2E" stroke-width="3" stroke-linecap="round"></line>
+          <circle cx="100" cy="100" r="5" fill="#4A3A2E"></circle>
+        </svg>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:10px;margin-top:-6px;">
+          <span style="font-family:'Pretendard',sans-serif;font-size:clamp(26px,2.8vw,48px);font-weight:600;color:{{ g.color }};">{{ g.val }}</span>
+          <span style="font-size:clamp(12px,1.15vw,21px);color:#8A7362;">{{ g.rankText }}</span>
+        </div>
+        <p style="font-size:clamp(11px,1.05vw,19px);color:#8A7362;margin:6px 0 0;">{{ g.dirNote }}</p>
+      </div>
+    </sc-for>
+  </div>
+  <p style="position:relative;font-size:clamp(12px,1.1vw,20px);color:#8A7362;margin:0;padding-right:clamp(40px,7vw,130px);max-width:1400px;">기준: 0~33 위험 · 34~66 보통 · 67~100 양호 — "전국 하위 8%"처럼 계산 근거가 명확한 수치를 사용한 이유는, 기준 불명의 등급 추정 부여가 오히려 더 위험하다는 판단.</p>
+</section>
+
+<section data-screen-label="17" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) 0 0 clamp(40px,7vw,130px);display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(26px,4vw,70px);align-items:center;">
+  <div style="padding-bottom:clamp(70px,10vh,120px);opacity:{{ rv16o }};transform:translateY({{ rv16y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-family:'Pretendard',sans-serif;font-size:clamp(13px,1.15vw,20px);letter-spacing:.18em;color:#6B4A32;margin:0 0 14px;">05 — 내 조합은 지금 어떤 상태일까</p>
+    <h2 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(24px,3vw,52px);margin:0 0 20px;line-height:1.32;">내가 거래하는 조합은,<br>지금 어떤 상태일까</h2>
+    <p style="font-size:clamp(15px,1.4vw,25px);line-height:1.8;color:#8A7362;margin:0 0 clamp(20px,3.4vh,32px);max-width:52ch;">5개 업권의 공시 지표를 2016년부터 반기 단위로 수집. 자본·자산건전성·수익성·유동성 4개 부문과 제재 기록까지 확인 가능.</p>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px clamp(18px,2.6vw,36px);margin-top:clamp(20px,3.4vh,32px);">
+      <img src="assets/qr-map.png" alt="전국 재무건전성 톺아보기 QR 코드" style="width:clamp(140px,13vw,170px);height:auto;flex:none;">
+      <div>
+        <p style="margin:0 0 6px;font-size:clamp(13px,1.2vw,20px);font-weight:600;color:#4A3A2E;">직접 확인해보세요</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px 20px;font-size:clamp(13px,1.25vw,22px);color:#8A7362;">
+          <span>조합 <b style="font-family:'Pretendard',sans-serif;color:#4A3A2E;">2,199</b>곳</span>
+          <span>시점 <b style="font-family:'Pretendard',sans-serif;color:#4A3A2E;">19</b>개 반기</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="align-self:center;background:rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.34);border-right:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 20px 50px -26px rgba(74,58,46,.4);border-radius:16px 0 0 16px;padding:clamp(18px,2vw,26px);margin-right:calc(-1 * clamp(20px,4vw,70px));height:min(78vh,760px);width:100%;">
+    <iframe src="site-map/index.html" title="전국 재무건전성 톺아보기 데모" style="width:100%;height:100%;border:1px solid rgba(74,58,46,.2);border-radius:10px;background:#fff;display:block;"></iframe>
+  </div>
+</section>
+
+<section data-screen-label="18" style="min-height:100vh;scroll-snap-align:start;box-sizing:border-box;padding:clamp(90px,13vh,150px) clamp(40px,7vw,130px) clamp(50px,8vh,90px);display:flex;flex-direction:column;justify-content:center;gap:clamp(30px,5vh,50px);">
+  <div style="max-width:1100px;margin:0 auto;text-align:center;opacity:{{ rv17o }};transform:translateY({{ rv17y }}px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);">
+    <p style="font-family:'Pretendard',sans-serif;font-size:clamp(13px,1.15vw,20px);letter-spacing:.18em;color:#6B4A32;margin:0 0 clamp(22px,3.4vh,36px);">06 — 결론</p>
+    <h2 style="font-family:'A2G',serif;font-weight:600;font-size:clamp(30px,4vw,60px);margin:0 0 clamp(26px,4vh,40px);line-height:1.3;">그래서,<br>당신의 통장은 안녕하십니까</h2>
+    <p style="font-size:clamp(15px,1.4vw,24px);line-height:1.85;margin:0 auto clamp(26px,4vh,40px);max-width:70ch;color:#8A7362;background:rgba(255,255,255,.28);border:1px solid rgba(74,58,46,.16);border-radius:14px;padding:clamp(20px,2.6vw,32px) clamp(24px,3vw,38px);text-align:left;">최근 몇 년 새 상호금융조합의 건전성이 빠르게 악화됐다. 부실채권비율은 오르고 있는데, 이를 감당할 대손충당금 커버리지는 오히려 낮아지고 있다. 위험은 커지는데 완충 능력은 약해지는 셈이다. 법정 공시조차 파일이 열리지 않거나 전문용어로 가득해, 결국 시민이 직접 해석해야 했다. 정보가 공개돼 있다는 것과, 실제로 이용할 수 있다는 것은 다른 문제다.</p>
+    <p style="font-family:'A2G',serif;font-weight:500;font-size:clamp(20px,2.3vw,36px);line-height:1.7;margin:0 auto;max-width:60ch;color:#1E3A6E;">내 돈을 맡긴 조합이 안전한지 묻는 건 특별한 요구가 아니다.<br>필요한 건 더 많은 숫자가 아니라, 시민이 제대로 볼 수 있게 만드는 공시다.</p>
+  </div>
+  <div style="padding-top:clamp(16px,2.6vh,26px);border-top:1px solid #4A3A2E33;font-size:clamp(12px,1.15vw,21px);color:#8A7362;line-height:1.7;text-align:center;margin-top:clamp(50px,9vh,110px);">
+    <p style="margin:0 0 10px;">자료 · 금융감독원 금융통계정보시스템(FISIS). 지역농협 경영공시 원문 전수 분석(2018~2026, 13,140건).</p>
+    <p style="margin:0 0 12px;font-weight:600;font-size:1.1em;color:#4A3A2E;">DSJA TeamA+</p>
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      <p style="margin:0;">고민성 기자 (gominseong37@naver.com)</p>
+      <p style="margin:0;">양지혜 기자 (sophia8812@naver.com)</p>
+      <p style="margin:0;">유현석 기자 (yoohs6692@gmail.com)</p>
+      <p style="margin:0;">장예담 기자 (jyd3013@naver.com)</p>
+      <p style="margin:0;">조찬희 기자 (byliner_cho@naver.com)</p>
+    </div>
+  </div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { active: 0, progress: 0, year: '2016', counts: {}, gaugeDisplay: null, typed: '' };
+
+  onScroll = () => {
+    const el = this.scroller;
+    if (!el) return;
+    const i = Math.round(el.scrollTop / el.clientHeight);
+    const p = Math.min(100, Math.max(0, (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100));
+    if (i !== this.state.active || Math.abs(p - this.state.progress) > 0.4) {
+      if (i !== this.state.active) {
+        const lo = Math.min(this.state.active, i), hi = Math.max(this.state.active, i);
+        for (let k = lo; k <= hi; k++) this.onEnterSection(k);
+      }
+      this.setState({ active: i, progress: p });
+    }
+  };
+
+  static CHAPTERS = [
+    { no: '', name: '당신의 통장은 안녕하십니까' },
+    { no: '사례', name: '남양주동부새마을금고' },
+    { no: '사례', name: '평소엔, 이 위험을 어떻게 알 수 있을까' },
+    { no: '목차', name: '탐사보도 목차' },
+    { no: '문제', name: '공시 자료 현황' },
+    { no: '01', name: '공시는 되어 있으나 열람은 어렵다' },
+    { no: '02', name: '파일 상태별 분류' },
+    { no: '02', name: '스캔본 71%, DRM 139건' },
+    { no: '02', name: '조합 확인 사례' },
+    { no: '02', name: '판정 기준' },
+    { no: '02', name: '수협 조합별 공시 방식' },
+    { no: '03', name: '금융 용어 이해도' },
+    { no: '03', name: '쉬운 금융 용어 사전' },
+    { no: '03', name: '설문 결과' },
+    { no: '04', name: '경영등급 산정 기준' },
+    { no: '04', name: '지표별 백분위 비교' },
+    { no: '05', name: '내 조합 조회' },
+    { no: '06', name: '결론' }
+  ];
+  static QUIZ = [
+    { label: '예수부채', rate: 26.9 },
+    { label: '위험가중자산', rate: 31.2 },
+    { label: '고정이하여신', rate: 34.3 },
+    { label: '대손상각', rate: 68.9 },
+    { label: '유가증권', rate: 83.8 }
+  ];
+  static GAUGES = [
+    { title: '자기자본비율', desc: '자산 대비 자본의 비율 — 자기 돈으로 얼마나 버틸 수 있는지', dirNote: '높을수록 좋음',
+      y2016: { nx: 165.86, ny: 76.29, val: 89, color: '#5B7A52', rankText: '전국 상위 11%' },
+      y2025: { nx: 131.78, ny: 37.63, val: 65, color: '#C9A227', rankText: '전국 상위 35%' } },
+    { title: '고정이하여신비율', desc: '떼일 위험이 큰 대출의 비중 — 3개월 이상 연체·회수곤란', dirNote: '낮을수록 좋음(반전 표시)',
+      y2016: { nx: 57.10, ny: 44.69, val: 29, color: '#B25444', rankText: '전국 하위 29%' },
+      y2025: { nx: 68.22, ny: 37.63, val: 35, color: '#C9A227', rankText: '전국 하위 35%' } },
+    { title: '수지비율', desc: '반기마다 남긴 돈 — 0 아래면 적자', dirNote: '높을수록 좋음',
+      y2016: { nx: 157.90, ny: 60.65, val: 81, color: '#5B7A52', rankText: '전국 상위 19%' },
+      y2025: { nx: 39.75, ny: 64.37, val: 17, color: '#B25444', rankText: '전국 하위 17%' } },
+    { title: '유동성비율', desc: '단기 상환 대비 당장 쓸 수 있는 돈 — 100%가 기준선', dirNote: '높을수록 좋음',
+      y2016: { nx: 137.51, ny: 40.90, val: 68, color: '#5B7A52', rankText: '전국 상위 32%' },
+      y2025: { nx: 144.62, ny: 46.06, val: 72, color: '#5B7A52', rankText: '전국 상위 28%' } }
+  ];
+  static COUNT_TARGETS = {
+    7: [{ id: 'stat71', target: 71 }, { id: 'stat139', target: 139 }],
+    9: [{ id: 'stat86', target: 86 }, { id: 'stat1538', target: 1538 }, { id: 'statSh15', target: 15 }]
+  };
+  static TERMS = [
+    { term: '순자본비율', size: 'clamp(24px,2.8vw,46px)', color: '#4A3A2E', plain: '빚을 빼고 남는 내 돈의 비율. 높을수록 안정적.' },
+    { term: '고정이하여신비율', size: 'clamp(24px,2.8vw,46px)', color: '#4A3A2E', plain: '떼일 위험이 큰 대출의 비중. 높을수록 위험.' },
+    { term: '대손충당금적립비율', size: 'clamp(24px,2.8vw,46px)', color: '#4A3A2E', plain: '떼일 돈에 대비해 쌓아둔 돈의 비율.' },
+    { term: '유동성비율', size: 'clamp(24px,2.8vw,46px)', color: '#4A3A2E', plain: '당장 쓸 수 있는 돈의 비율. 100% 밑이면 위험 신호.' },
+    { term: '총자산순이익률', size: 'clamp(24px,2.8vw,46px)', color: '#4A3A2E', plain: '가진 돈 전체로 반기 동안 거둔 수익.' },
+    { term: '순이자마진', size: 'clamp(24px,2.8vw,46px)', color: '#4A3A2E', plain: '대출 이자에서 예금 이자를 뺀 순수 이윤의 비율.' },
+    { term: '자기자본비율', size: 'clamp(24px,2.8vw,46px)', color: '#4A3A2E', plain: '전체 자산 중 빚이 아닌 내 돈(자본)의 비율.' }
+  ];
+
+  static lerpHex(a, b, t) {
+    const pa = [1, 3, 5].map((i) => parseInt(a.slice(i, i + 2), 16));
+    const pb = [1, 3, 5].map((i) => parseInt(b.slice(i, i + 2), 16));
+    return '#' + pa.map((v, i) => Math.round(v + (pb[i] - v) * t).toString(16).padStart(2, '0')).join('');
+  }
+
+  componentDidMount() {
+    this.enteredSections = new Set();
+    this.countedSections = new Set();
+    this._destroyed = false;
+    this.onKey = (e) => {
+      if (['ArrowDown', 'ArrowRight', 'PageDown', ' ', 'Spacebar'].includes(e.key)) { e.preventDefault(); this.goTo(this.state.active + 1); }
+      else if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); this.goTo(this.state.active - 1); }
+      else if (e.key === 'Home') { e.preventDefault(); this.goTo(0); }
+      else if (e.key === 'End') { e.preventDefault(); this.goTo(Component.CHAPTERS.length - 1); }
+    };
+    window.addEventListener('keydown', this.onKey);
+    this.setState({ gaugeDisplay: Component.GAUGES.map((g) => ({ ...g.y2016 })) });
+    setTimeout(() => {
+      this.onEnterSection(0);
+      if (this.scroller) {
+        const secs = Array.from(this.scroller.querySelectorAll('[data-screen-label]'));
+        this.io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const idx = secs.indexOf(entry.target);
+              if (idx > -1) this.onEnterSection(idx);
+            }
+          });
+        }, { root: this.scroller, threshold: 0.3 });
+        secs.forEach((s) => this.io.observe(s));
+      }
+      this.forceUpdate();
+    }, 60);
+    this.startTypeLoop();
+  }
+
+  componentWillUnmount() {
+    this._destroyed = true;
+    window.removeEventListener('keydown', this.onKey);
+    if (this.scroller) this.scroller.removeEventListener('scroll', this.onScroll);
+    if (this.io) this.io.disconnect();
+  }
+
+  goTo(i) {
+    const el = this.scroller;
+    if (!el) return;
+    const n = Math.max(0, Math.min(Component.CHAPTERS.length - 1, i));
+    const secs = el.querySelectorAll('[data-screen-label]');
+    const target = secs[n];
+    if (target) el.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
+    else el.scrollTo({ top: n * el.clientHeight, behavior: 'smooth' });
+  }
+
+  onEnterSection(i) {
+    if (this.enteredSections) this.enteredSections.add(i);
+    this.maybeCountSection(i);
+  }
+
+  reveal(i) {
+    return this.enteredSections && this.enteredSections.has(i) ? { o: 1, y: 0 } : { o: 0, y: 14 };
+  }
+
+  maybeCountSection(i) {
+    if (this.countedSections.has(i)) return;
+    this.countedSections.add(i);
+    const targets = Component.COUNT_TARGETS[i];
+    if (!targets) return;
+    targets.forEach((t) => this.animateCount(t.id, t.target, t.decimals || 0));
+  }
+
+  animateCount(id, target) {
+    const start = performance.now();
+    const duration = 1100;
+    const step = (now) => {
+      if (this._destroyed) return;
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      this.setState((s) => ({ counts: { ...s.counts, [id]: target * eased } }));
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  setYear(year) {
+    const fromArr = this.state.gaugeDisplay || Component.GAUGES.map((g) => g.y2016);
+    const toArr = Component.GAUGES.map((g) => (year === '2016' ? g.y2016 : g.y2025));
+    this.setState({ year });
+    this.animateGauges(fromArr, toArr);
+  }
+
+  animateGauges(fromArr, toArr) {
+    const start = performance.now();
+    const duration = 650;
+    const step = (now) => {
+      if (this._destroyed) return;
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const cur = toArr.map((to, i) => {
+        const from = fromArr[i];
+        return {
+          nx: from.nx + (to.nx - from.nx) * eased,
+          ny: from.ny + (to.ny - from.ny) * eased,
+          val: from.val + (to.val - from.val) * eased,
+          color: Component.lerpHex(from.color, to.color, eased),
+          rankText: to.rankText
+        };
+      });
+      this.setState({ gaugeDisplay: cur });
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  startTypeLoop() {
+    const word = '강남농협';
+    let i = 0, deleting = false;
+    const tick = () => {
+      if (this._destroyed) return;
+      if (!deleting) {
+        i++;
+        if (i > word.length) { deleting = true; setTimeout(tick, 1100); return; }
+      } else {
+        i--;
+        if (i < 0) { i = 0; deleting = false; setTimeout(tick, 600); return; }
+      }
+      this.setState({ typed: word.slice(0, i) });
+      setTimeout(tick, deleting ? 65 : 130);
+    };
+    setTimeout(tick, 900);
+  }
+
+  renderVals() {
+    const a = this.state.active;
+    const onPhoto = a === 1 || a === 2;
+    const y16 = this.state.year === '2016';
+
+    if (!this._scanCells) {
+      let seed = 20260826;
+      const rnd = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
+      this._scanCells = Array.from({ length: 15 * 5 }, (_, i) => {
+        const bad = rnd() < 0.3023;
+        return { key: i, color: bad ? '#B25444' : '#C9A227', label: bad ? '확인 불가' : '확인 가능' };
+      });
+    }
+    const quizRevealed = this.enteredSections && this.enteredSections.has(11);
+    if (!this._quizBase) {
+      this._quizBase = Component.QUIZ.map((q) => {
+        const r = q.rate;
+        const color = r < 33 ? Component.lerpHex('#C98A80', '#B25444', r / 33)
+          : r < 66 ? Component.lerpHex('#D9C285', '#C9A227', (r - 33) / 33)
+          : Component.lerpHex('#8FAE85', '#5B7A52', (r - 66) / 34);
+        return { label: q.label, rate: r, color, filled: Math.round(r) };
+      });
+    }
+    this._quizItems = this._quizBase.map((q) => ({
+      label: q.label, rateText: q.rate.toFixed(1) + '%', color: q.color,
+      cells: Array.from({ length: 100 }, (_, ci) => ({
+        key: ci,
+        bg: quizRevealed && ci < q.filled ? q.color : '#E3DED5',
+        delay: Math.floor(ci / 10) * 90
+      }))
+    }));
+    if (!this._termCards) {
+      this._termCards = Component.TERMS.map((t, i) => ({ key: i, term: t.term, size: t.size, color: t.color, plain: t.plain }));
+    }
+    const scanCells = this._scanCells;
+    const quizItems = this._quizItems;
+    const termCards = this._termCards;
+
+    const gaugeSrc = this.state.gaugeDisplay || Component.GAUGES.map((g) => g.y2016);
+    const gauges = Component.GAUGES.map((g, i) => {
+      const v = gaugeSrc[i];
+      return { key: i, title: g.title, desc: g.desc, dirNote: g.dirNote, nx: v.nx, ny: v.ny, val: Math.round(v.val), color: v.color, rankText: v.rankText };
+    });
+
+    const cnt = this.state.counts;
+    const fmtInt = (id) => Math.round(cnt[id] || 0).toLocaleString('ko-KR');
+    const fmtDec = (id, d) => (cnt[id] || 0).toFixed(d);
+
+    const revealObj = {};
+    for (let i = 0; i < Component.CHAPTERS.length; i++) {
+      const r = this.reveal(i);
+      revealObj['rv' + i + 'o'] = r.o;
+      revealObj['rv' + i + 'y'] = r.y;
+    }
+
+    return {
+      ...revealObj,
+      stat475: '475',
+      stat100: '100',
+      stat13140: '13,140',
+      stat3023: '30.23',
+      stat71: fmtInt('stat71'),
+      stat139: fmtInt('stat139'),
+      stat86: fmtInt('stat86'),
+      shPct86: (cnt.stat86 || 0) / 91 * 100,
+      stat1538: fmtInt('stat1538'),
+      statSh15: fmtInt('statSh15'),
+      scrollRef: (el) => {
+        if (el && el !== this.scroller) {
+          this.scroller = el;
+          el.addEventListener('scroll', this.onScroll, { passive: true });
+        }
+      },
+      progressPct: this.state.progress,
+      tocItems: Component.CHAPTERS.map((c, i) => ({ c, i })).filter(({ c }) => /^0[1-6]$|^문제$/.test(c.no)).filter(({ c }, idx, arr) => idx === 0 || c.no !== arr[idx - 1].c.no).map(({ c, i }, idx) => ({
+        key: i,
+        idx: String(idx + 1).padStart(2, '0'),
+        no: c.no,
+        name: c.name,
+        onClick: (e) => { e.preventDefault(); this.goTo(i); }
+      })),
+      navItems: Component.CHAPTERS.map((c, i) => ({ c, i })).filter(({ c, i }) => i === 0 || c.no !== Component.CHAPTERS[i - 1].no).map(({ c, i }) => ({
+        key: i,
+        dotW: i === a ? 26 : 12,
+        color: i === a ? (onPhoto ? '#ffffff' : '#4A3A2E') : (onPhoto ? '#ffffff55' : '#8A736255'),
+        name: c.name,
+        label: c.no || '시작',
+        onClick: (e) => { e.preventDefault(); this.goTo(i); }
+      })),
+      scanCells,
+      quizItems,
+      termCards,
+      searchDisplayText: this.state.typed || '조합 이름을 입력하세요 (예: 강남농협)',
+      searchTextColor: this.state.typed ? '#4A3A2E' : '#8A7362',
+      setY2016: () => this.setYear('2016'),
+      setY2025: () => this.setYear('2025'),
+      y2016Bg: y16 ? '#6B4A32' : '#ffffff66',
+      y2016Color: y16 ? '#fff' : '#8A7362',
+      y2025Bg: y16 ? '#ffffff66' : '#6B4A32',
+      y2025Color: y16 ? '#8A7362' : '#fff',
+      gauges
+    };
+  }
+}
+</script>
+</body>
+</html>
